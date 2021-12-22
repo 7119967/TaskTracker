@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.OpenApi.Models;
 
 namespace TaskTracker
 {
@@ -25,7 +26,18 @@ namespace TaskTracker
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            OpenApiInfo info = new OpenApiInfo() 
+            {
+                Version = "v1",
+                Title = "Test API",
+                Description = "ASP.NET Core Web API"
+            };
+
             services.AddControllers();
+            services.AddSwaggerGen(s => 
+            {
+                s.SwaggerDoc("v1", info);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -35,6 +47,12 @@ namespace TaskTracker
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(a =>
+            {
+                a.SwaggerEndpoint("/swagger/v1/swagger.json", "Test API V1");
+            });
 
             app.UseHttpsRedirection();
 
