@@ -26,17 +26,14 @@ namespace TaskTracker
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            OpenApiInfo info = new OpenApiInfo() 
-            {
-                Version = "v1",
-                Title = "Test API",
-                Description = "ASP.NET Core Web API"
-            };
-
             services.AddControllers();
-            services.AddSwaggerGen(s => 
+            services.AddSwaggerGen(options =>
             {
-                s.SwaggerDoc("v1", info);
+                options.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "TaskTracker",
+                    Version = "v1",
+                });
             });
         }
 
@@ -51,7 +48,7 @@ namespace TaskTracker
             app.UseSwagger();
             app.UseSwaggerUI(a =>
             {
-                a.SwaggerEndpoint("/swagger/v1/swagger.json", "Test API V1");
+                a.SwaggerEndpoint("/swagger/v1/swagger.json", "TaskTracker");
             });
 
             app.UseHttpsRedirection();
