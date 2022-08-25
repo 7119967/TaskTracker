@@ -11,11 +11,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<TaskTrackerContext>(x =>
-{
-    x.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
-    x.UseSnakeCaseNamingConvention();
-});
+builder.Services.AddDbContext<TaskTrackerContext>(options => options
+    .UseLazyLoadingProxies()    
+    .UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
+    .UseSnakeCaseNamingConvention()
+);
 
 builder.Services.AddScoped(typeof(DbContext), typeof(TaskTrackerContext));
 builder.Services.AddScoped(typeof(IRepository<>), typeof(EFRepository<>));
