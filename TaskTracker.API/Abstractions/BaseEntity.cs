@@ -7,7 +7,7 @@ namespace TaskTracker.API.Abstractions
     {
         public Guid Id { get; set; }
 
-        [Required(ErrorMessage = "Поле не может быть пустым")]
+        [Required(ErrorMessage = "The field can't be empty")]
         public string Name { get; set; }
         public Priority Priority { get; set; }
     }
