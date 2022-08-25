@@ -8,7 +8,6 @@ namespace TaskTracker.API.Data
     {
         public DbSet<Project> Projects { get; set; }
         public DbSet<Task> Tasks { get; set; }
-        public DbSet<Operation> Operations { get; set; }
         public TaskTrackerContext(DbContextOptions<TaskTrackerContext> options) : base(options)
         {
         }
