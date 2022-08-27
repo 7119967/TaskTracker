@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  tasktracker.api:
+    image: ${DOCKER_REGISTRY-}tasktrackerapi
+    build:
+      context: .
+      dockerfile: TaskTracker.API/Dockerfile
+  tasktracker.ui:
+    image: ${DOCKER_REGISTRY-}tasktrackerui
+    build:
+      context: .
+      dockerfile: TaskTracker.UI/Dockerfile
+  tasktracker.proxy:
+    image: nginx:mainline
