@@ -5,31 +5,35 @@ export class FetchData extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { forecasts: [], loading: true };
+    this.state = { projects: [], loading: true };
   }
 
   componentDidMount() {
-    this.populateWeatherData();
+    this.getProjectsData();
   }
 
-  static renderForecastsTable(forecasts) {
+  static renderForecastsTable(projects) {
     return (
       <table className='table table-striped' aria-labelledby="tabelLabel">
         <thead>
           <tr>
-            <th>Date</th>
-            <th>Temp. (C)</th>
-            <th>Temp. (F)</th>
-            <th>Summary</th>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Priority</th>
+            <th scope="col">StartDate</th>
+            <th scope="col">CompletionDate</th>
+            <th scope="col">Status</th>
           </tr>
         </thead>
         <tbody>
-          {forecasts.map(forecast =>
-            <tr key={forecast.date}>
-              <td>{forecast.date}</td>
-              <td>{forecast.temperatureC}</td>
-              <td>{forecast.temperatureF}</td>
-              <td>{forecast.summary}</td>
+          {projects.map(project =>
+            <tr key={project.id}>
+              <th scope="row">{project.id}</th>
+              <td>{project.name}</td>
+              <td>{project.priority}</td>
+              <td>{project.startDate}</td>
+              <td>{project.completionDate}</td>
+              <td>{project.status}</td>
             </tr>
           )}
         </tbody>
@@ -40,20 +44,20 @@ export class FetchData extends Component {
   render() {
     let contents = this.state.loading
       ? <p><em>Loading...</em></p>
-      : FetchData.renderForecastsTable(this.state.forecasts);
+      : FetchData.renderForecastsTable(this.state.projects);
 
     return (
       <div>
-        <h1 id="tabelLabel" >Weather forecast</h1>
-        <p>This component demonstrates fetching data from the server.</p>
+        <h1 id="tabelLabel" >Projects</h1>
+        <p>This table demonstrates fetching data from the server.</p>
         {contents}
       </div>
     );
   }
 
-  async populateWeatherData() {
-    const response = await fetch('weatherforecast');
+  async getProjectsData() {
+    const response = await fetch('http://localhost:5172/api/Project');
     const data = await response.json();
-    this.setState({ forecasts: data, loading: false });
+    this.setState({ projects: data, loading: false });
   }
 }

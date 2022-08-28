@@ -1,4 +1,4 @@
-﻿import React, { Component } from 'react';
+import React, { Component } from 'react';
 
 export class Project extends Component {
     static displayName = Project.name;
@@ -10,7 +10,7 @@ export class Project extends Component {
 
     getProjects = async () => {
         var response = await fetch(
-            'api/Project',
+            'http://localhost:5172/api/Project',
             {
                 method: 'get'
             }
