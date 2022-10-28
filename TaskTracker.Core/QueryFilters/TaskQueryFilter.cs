@@ -6,6 +6,7 @@ namespace TaskTracker.Core.QueryFilters
     public class TaskQueryFilter
     {
         public TaskStatus Status { get; set; }
+        public string Name { get; set; }
         public string Description { get; set; }
         public Priority Priority { get; set; }
         public DateTime? Create { get; set; }

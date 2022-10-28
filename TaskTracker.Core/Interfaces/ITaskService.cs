@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using TaskTracker.Core.QueryFilters;
+using MyTask = TaskTracker.Core.Entities.Task;
 
 namespace TaskTracker.Core.Interfaces
 {
-    internal interface ITaskService
+    public interface ITaskService
     {
+        IEnumerable<MyTask> Gets();
+        IEnumerable<MyTask> GetAll();
+        Task<MyTask> Get(Guid id);
+        Task Insert(MyTask item);
+        void Update(MyTask item);
+        Task Delete(Guid id);
+        IEnumerable<MyTask> TaskFilter(TaskQueryFilter filterQuery);
     }
 }
