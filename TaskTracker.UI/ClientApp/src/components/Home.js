@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 export class Home extends Component {
   static displayName = Home.name;
-  
+
   constructor(props) {
     super(props);
     this.state = { projects: [], loading: true };
@@ -10,6 +10,24 @@ export class Home extends Component {
 
   componentDidMount() {
     this.getProjectsData();
+  }
+  
+  createProject() {
+    this.setState({
+
+    });
+  } 
+
+  editProject() {
+    this.setState({
+
+    });
+  }  
+  
+  deleteProject() {
+    this.setState({
+
+    });
   }
 
   static renderProjectsTable(projects) {
@@ -35,6 +53,8 @@ export class Home extends Component {
                 <td>{project.startDate}</td>
                 <td>{project.completionDate}</td>
                 <td>{project.status}</td>
+                <button className="btn btn-secondary" onClick={this.editProject}>Edit</button>
+                <button className="btn btn-danger" onClick={this.deleteProject}>Delete</button>
               </tr>
             )}
           </tbody>
@@ -49,11 +69,11 @@ export class Home extends Component {
       : Home.renderProjectsTable(this.state.projects);
 
     return (
-      <div>
-        <h1 id="tabelLabel" >Projects</h1>
-        <p>This table demonstrates fetching data from the server.</p>
-        {contents}
-      </div>
+        <div>
+          <h1 id="tabelLabel">Projects</h1>
+          <p>This table demonstrates fetching data from the server.</p>
+          {contents}
+        </div>
     );
   }
 
