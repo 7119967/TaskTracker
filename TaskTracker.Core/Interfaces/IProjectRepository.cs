@@ -2,7 +2,7 @@
 
 namespace TaskTracker.Core.Interfaces
 {
-    internal interface IProjectRepository : IRepository<Project>
+    public interface IProjectRepository : IRepository<Project>
     {
     }
 }

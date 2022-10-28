@@ -1,10 +1,11 @@
-﻿using TaskTracker.API.Enums;
+﻿using TaskTracker.Core.Enums;
 
 namespace TaskTracker.Core.QueryFilters
 {
-    internal class ProjectQueryFilter
+    public class ProjectQueryFilter
     {
-        public string Name { get; set; }
+        public DateTime? Create { get; set; }
+        public DateTime? Modify { get; set; }
         public Priority Priority { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime CompletionDate { get; set; }

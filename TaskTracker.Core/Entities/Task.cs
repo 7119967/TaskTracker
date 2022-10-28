@@ -1,5 +1,4 @@
-﻿using TaskTracker.API.Abstractions;
-using TaskStatus = TaskTracker.API.Enums.TaskStatus;
+﻿using TaskStatus = TaskTracker.Core.Enums.TaskStatus;
 
 namespace TaskTracker.Core.Entities
 {

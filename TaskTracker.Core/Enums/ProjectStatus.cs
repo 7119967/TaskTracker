@@ -1,4 +1,4 @@
-﻿namespace TaskTracker.API.Enums
+﻿namespace TaskTracker.Core.Enums
 {
     public enum ProjectStatus
     {

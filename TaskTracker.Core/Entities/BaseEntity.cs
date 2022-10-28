@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using TaskTracker.API.Enums;
+using TaskTracker.Core.Enums;
 
 namespace TaskTracker.Core.Entities
 {

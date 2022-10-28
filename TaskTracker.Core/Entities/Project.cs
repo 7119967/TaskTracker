@@ -1,5 +1,4 @@
-﻿using TaskTracker.API.Abstractions;
-using TaskTracker.API.Enums;
+﻿using TaskTracker.Core.Enums;
 
 namespace TaskTracker.Core.Entities
 {

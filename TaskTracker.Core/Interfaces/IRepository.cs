@@ -7,10 +7,10 @@ namespace TaskTracker.Core.Interfaces
     public interface IRepository<T> where T : BaseEntity
     {
         IEnumerable<T> GetAll();
-        Task<T> GetById(int id);
+        Task<T> GetById(Guid id);
         Task Add(T entity);
         void Update(T entity);
-        Task Delete(int id);
+        Task Delete(Guid id);
 
         IEnumerable<T> Find(Expression<Func<T, bool>> condition, params string[] includedProperties);
         IEnumerable<T> GetAll(params string[] includedProperties);
