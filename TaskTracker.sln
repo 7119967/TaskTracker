@@ -4,6 +4,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.3.32811.315
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskTracker.API", "TaskTracker.API\TaskTracker.API.csproj", "{CC2B2B3F-2207-4C6F-AABE-84BF85F6A578}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3644BDA4-5CB6-4A53-A910-AC38E86095EC} = {3644BDA4-5CB6-4A53-A910-AC38E86095EC}
+		{9754CB0D-0CE7-45A2-9982-1DA28BAF4B27} = {9754CB0D-0CE7-45A2-9982-1DA28BAF4B27}
+	EndProjectSection
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{982BE5E1-5BC4-40ED-B0C7-7D3EED7290CD}"
 EndProject
