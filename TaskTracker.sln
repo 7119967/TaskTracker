@@ -9,7 +9,12 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskTracker.UI", "TaskTracker.UI\TaskTracker.UI.csproj", "{CB24B849-1F1F-48AF-B101-1CFB2768CE4A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskTracker.Core", "TaskTracker.Core\TaskTracker.Core.csproj", "{9754CB0D-0CE7-45A2-9982-1DA28BAF4B27}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskTracker.Core", "TaskTracker.Core\TaskTracker.Core.csproj", "{9754CB0D-0CE7-45A2-9982-1DA28BAF4B27}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskTracker.Infrastructure", "TaskTracker.Infrastructure\TaskTracker.Infrastructure.csproj", "{3644BDA4-5CB6-4A53-A910-AC38E86095EC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9754CB0D-0CE7-45A2-9982-1DA28BAF4B27} = {9754CB0D-0CE7-45A2-9982-1DA28BAF4B27}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +38,10 @@ Global
 		{9754CB0D-0CE7-45A2-9982-1DA28BAF4B27}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9754CB0D-0CE7-45A2-9982-1DA28BAF4B27}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9754CB0D-0CE7-45A2-9982-1DA28BAF4B27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3644BDA4-5CB6-4A53-A910-AC38E86095EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3644BDA4-5CB6-4A53-A910-AC38E86095EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3644BDA4-5CB6-4A53-A910-AC38E86095EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3644BDA4-5CB6-4A53-A910-AC38E86095EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

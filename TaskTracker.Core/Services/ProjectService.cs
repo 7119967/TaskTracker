@@ -13,6 +13,13 @@ namespace TaskTracker.Core.Services
         {
             _unitOfWork = unitOfWork;
         }
+
+        public async Task Delete(Guid id)
+        {
+            await _unitOfWork.ProjectRepository.Delete(id);
+            _unitOfWork.Commit();
+        }
+
         public async Task<Project> Get(Guid id)
         {
             var res = await _unitOfWork.ProjectRepository.GetById(id);
@@ -24,9 +31,10 @@ namespace TaskTracker.Core.Services
             return _unitOfWork.ProjectRepository.GetAll();
         }
 
-        public Task Insert(Project item)
+        public async Task Insert(Project item)
         {
-            throw new NotImplementedException();
+            await _unitOfWork.ProjectRepository.Add(item);
+            _unitOfWork.Commit();
         }
 
         public IEnumerable<Project> ProjectAndTasks(Guid id)
@@ -38,12 +46,32 @@ namespace TaskTracker.Core.Services
 
         public IEnumerable<Project> ProjectFilter(ProjectQueryFilter filterQuery)
         {
-            throw new NotImplementedException();
+            var project = _unitOfWork.ProjectRepository.GetAll();
+            var response = this.FilterListProject(project, filterQuery);
+            return response;
         }
 
         public void Update(Project item)
         {
-            throw new NotImplementedException();
+            _unitOfWork.ProjectRepository.Update(item);
+            _unitOfWork.Commit();
+        }
+
+        private IEnumerable<Project> FilterListProject(IEnumerable<Project> res, ProjectQueryFilter filterQuery)
+        {
+            IEnumerable<Project> filter = new List<Project>();
+
+            if (filterQuery.Name != null)
+            {
+                filter = res.Where(x => x.Name == filterQuery.Name);
+            }
+
+            if (filterQuery.Status > 0)
+            {
+                filter = res.Where(x => x.Status == filterQuery.Status);
+            }
+
+            return filter;
         }
     }
 }
