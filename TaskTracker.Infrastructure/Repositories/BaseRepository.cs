@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using TaskTracker.Core.Entities;
 using TaskTracker.Core.Interfaces;
 using TaskTracker.Infrastructure.Data;
+using TaskTracker.Infrastructure.DataExtensions;
 using Task = System.Threading.Tasks.Task;
 
 namespace TaskTracker.Infrastructure.Repositories
@@ -87,7 +88,7 @@ namespace TaskTracker.Infrastructure.Repositories
 
             if (data != null && data.Tables.Count > 0)
             {
-                //response = data.Tables[0].DataTableToList<T>();
+                response = data.Tables[0].DataTableToList<T>();
                 response = null;
             }
 
