@@ -37,7 +37,6 @@ namespace TaskTracker.Infrastructure.Repositories
             return result.AsEnumerable();
         }
 
-
         public IEnumerable<T> Find(Expression<Func<T, bool>> condition, params string[] includedProperties)
         {
             IQueryable<T> result = this.Find(condition);
@@ -69,7 +68,6 @@ namespace TaskTracker.Infrastructure.Repositories
             T entity = await GetById(id);
             _entities.Remove(entity);
         }
-
 
         private IQueryable<T> Find(Expression<Func<T, bool>> condition)
         {

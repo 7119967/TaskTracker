@@ -23,12 +23,12 @@ namespace TaskTracker.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new SecurityConfiguration());
-            modelBuilder.ApplyConfiguration(new ProjectConfiguration());
-            modelBuilder.ApplyConfiguration(new TaskConfiguration());
+            //modelBuilder.ApplyConfiguration(new SecurityConfiguration());
+            //modelBuilder.ApplyConfiguration(new ProjectConfiguration());
+            //modelBuilder.ApplyConfiguration(new TaskConfiguration());
 
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-            OnModelCreatingPartial(modelBuilder);
+            //modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            //OnModelCreatingPartial(modelBuilder);
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
