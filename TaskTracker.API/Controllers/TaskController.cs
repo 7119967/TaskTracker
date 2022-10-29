@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using TaskTracker.API.Abstractions;
-using TaskTracker.API.Models.Entities;
-using Task = TaskTracker.API.Models.Entities.Task;
+﻿using Microsoft.AspNetCore.Mvc;
+using TaskTracker.API.Responses;
+using TaskTracker.Core.Interfaces;
+using TaskTracker.Core.QueryFilters;
+using Task = TaskTracker.Core.Entities.Task;
 
 namespace TaskTracker.API.Controllers
 {
@@ -10,58 +10,88 @@ namespace TaskTracker.API.Controllers
     [ApiController]
     public class TaskController : ControllerBase
     {
-        private readonly IRepository<Task> _repository;
-        public TaskController(IRepository<Task> repository)
+        private readonly ITaskService _taskService;
+
+        public TaskController(ITaskService TaskService)
         {
-            _repository = repository;
+            _taskService = TaskService;
+        }
+
+        [HttpGet("getFilter")]
+        public IActionResult GetFilter([FromQuery] TaskQueryFilter filterQuery)
+        {
+            try
+            {
+                var service = _taskService.TaskFilter(filterQuery);
+                var response = new ApiResponse<IEnumerable<Task>>(service);
+                return Ok(response);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(new APIError { Version = "1.0", ErrorMessage = ex.Message, StatusCode = "500" });
+            }
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Task>> Get()
+        public IActionResult Get()
         {
-            var tasks = await _repository.GetAllAsync();
-            return tasks;
+            try
+            {
+                var service = _taskService.Gets();
+                var response = new ApiResponse<IEnumerable<Task>>(service);
+                return Ok(response);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(new APIError { Version = "1.0", ErrorMessage = ex.Message, StatusCode = "500" });
+            }
         }
 
         [HttpGet("{id}")]
-        public async Task<Task?> Get(Guid id)
+        public async Task<IActionResult> Get(Guid id)
         {
-            var task = await _repository.GetAsync(id);
-            return task;
+            try
+            {
+                var service = await _taskService.Get(id);
+                var response = new ApiResponse<Task>(service);
+                return Ok(response);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(new APIError { Version = "1.0", ErrorMessage = ex.Message, StatusCode = "500" });
+            }
         }
 
         [HttpPost]
-        public async Task<Task> Post([FromBody] Task entity)
+        public async Task<IActionResult> Post(Task item)
         {
-            entity.Id = Guid.NewGuid();
-            await _repository.AddAsync(entity);
-            return entity;
+            try
+            {
+                await _taskService.Insert(item);
+                var response = new ApiResponse<Task>(item);
+                return Ok(response);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(new APIError { Version = "1.0", ErrorMessage = ex.Message, StatusCode = "500" });
+            }
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(Guid id, [FromBody] Task entity)
+        [HttpPut]
+        public IActionResult Put(Guid id, Task item)
         {
-            var task = await _repository.GetAsync(id);
-            if (task is null)
+            try
             {
-                return BadRequest("Task does not exist");
+                item.Id = id;
+                _taskService.Update(item);
+                var response = new ApiResponse<bool>(true);
+
+                return Ok(response);
             }
-
-            await _repository.UpdateAsync(entity);
-            return Ok();
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            var task = await _repository.GetAsync(id);
-            if (task is null)
+            catch (System.Exception ex)
             {
-                return BadRequest("Task does not exist");
+                return BadRequest(new APIError { Version = "1.0", ErrorMessage = ex.Message, StatusCode = "500" });
             }
-
-            await _repository.DeleteAsync(id);
-            return Ok();
         }
     }
 }

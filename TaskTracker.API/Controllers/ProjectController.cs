@@ -1,66 +1,116 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TaskTracker.API.Abstractions;
-using TaskTracker.API.Models.Entities;
+using TaskTracker.API.Responses;
+using TaskTracker.Core.Entities;
+using TaskTracker.Core.Interfaces;
+using TaskTracker.Core.QueryFilters;
 
 namespace TaskTracker.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ProjectController : ControllerBase
     {
-        private readonly IRepository<Project> _repository;
-        public ProjectController(IRepository<Project> repository)
+        private readonly IProjectService _projectService;
+
+        public ProjectController(IProjectService ProjectService)
         {
-            _repository = repository;
+            _projectService = ProjectService;
         }
+
+        [HttpGet("getFilter")]
+        public IActionResult GetFilter([FromQuery] ProjectQueryFilter filterQuery)
+        {
+            try
+            {
+                var service = _projectService.ProjectFilter(filterQuery);
+                var response = new ApiResponse<IEnumerable<Project>>(service);
+                return Ok(response);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(new APIError { Version = "1.0", ErrorMessage = ex.Message, StatusCode = "500" });
+            }
+        }
+
 
         [HttpGet]
-        public async Task<IEnumerable<Project>> Get()
+        public IActionResult Get()
         {
-            var projects = await _repository.GetAllAsync();
-            return projects;
+            try
+            {
+                var service = _projectService.Gets();
+                var response = new ApiResponse<IEnumerable<Project>>(service);
+                return Ok(response);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(new APIError { Version = "1.0", ErrorMessage = ex.Message, StatusCode = "500" });
+            }
         }
 
+
         [HttpGet("{id}")]
-        public async Task<Project?> Get(Guid id)
+        public async Task<IActionResult> Get(Guid id)
         {
-            var project = await _repository.GetAsync(id);
-            return project;
+            try
+            {
+                var service = await _projectService.Get(id);
+                var response = new ApiResponse<Project>(service);
+                return Ok(response);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(new APIError { Version = "1.0", ErrorMessage = ex.Message, StatusCode = "500" });
+            }
+        }
+
+        [HttpGet("projectAndTasks")]
+        public IActionResult BuildAndDepartaments(Guid id)
+        {
+            try
+            {
+                var service = _projectService.ProjectAndTasks(id);
+                var response = new ApiResponse<IEnumerable<Project>>(service);
+                return Ok(response);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(new APIError { Version = "1.0", ErrorMessage = ex.Message, StatusCode = "500" });
+            }
         }
 
         [HttpPost]
-        public async Task<Project> Post([FromBody] Project entity)
+        public async Task<IActionResult> Post(Project item)
         {
-            entity.Id = Guid.NewGuid();
-            await _repository.AddAsync(entity);
-            return entity;
+            try
+            {
+                await _projectService.Insert(item);
+                var response = new ApiResponse<Project>(item);
+                return Ok(response);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(new APIError { Version = "1.0", ErrorMessage = ex.Message, StatusCode = "500" });
+            }
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(Guid id, [FromBody] Project entity)
+        [HttpPut]
+        public IActionResult Put(Guid id, Project item)
         {
-            var project = await _repository.GetAsync(id);
-            if (project is null)
+            try
             {
-                return BadRequest("Project does not exist");
+                item.Id = id;
+                _projectService.Update(item);
+                var response = new ApiResponse<bool>(true);
+
+                return Ok(response);
             }
-
-            await _repository.UpdateAsync(entity);
-            return Ok();
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            var project = await _repository.GetAsync(id);
-            if (project is null)
+            catch (System.Exception ex)
             {
-                return BadRequest("Project does not exist");
+                return BadRequest(new APIError { Version = "1.0", ErrorMessage = ex.Message, StatusCode = "500" });
             }
-
-            await _repository.DeleteAsync(id);
-            return Ok();
         }
     }
 }

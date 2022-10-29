@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentValidation;
+using TaskTracker.Core.Entities;
 
 namespace TaskTracker.Infrastructure.Validators
 {
-    internal class ProjectValidator
+    public class ProjectValidator : AbstractValidator<Project>
     {
+        public ProjectValidator()
+        {
+            RuleFor(p => p.Name)
+                .NotNull()
+                .Length(1, 256);
+        }
     }
 }
