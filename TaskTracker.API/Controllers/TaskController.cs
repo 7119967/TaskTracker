@@ -2,10 +2,12 @@
 using TaskTracker.API.Responses;
 using TaskTracker.Core.Interfaces;
 using TaskTracker.Core.QueryFilters;
+using TaskTracker.Core.Services;
 using Task = TaskTracker.Core.Entities.Task;
 
 namespace TaskTracker.API.Controllers
 {
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class TaskController : ControllerBase
@@ -92,6 +94,19 @@ namespace TaskTracker.API.Controllers
             {
                 return BadRequest(new APIError { Version = "1.0", ErrorMessage = ex.Message, StatusCode = "500" });
             }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var task = await _taskService.Get(id);
+            if (task is null)
+            {
+                return BadRequest("Task does not exist");
+            }
+
+            await _taskService.Delete(id);
+            return Ok();
         }
     }
 }

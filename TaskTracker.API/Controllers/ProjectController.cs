@@ -7,7 +7,7 @@ using TaskTracker.Core.QueryFilters;
 
 namespace TaskTracker.API.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ProjectController : ControllerBase
@@ -49,7 +49,6 @@ namespace TaskTracker.API.Controllers
                 return BadRequest(new APIError { Version = "1.0", ErrorMessage = ex.Message, StatusCode = "500" });
             }
         }
-
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid id)
@@ -111,6 +110,19 @@ namespace TaskTracker.API.Controllers
             {
                 return BadRequest(new APIError { Version = "1.0", ErrorMessage = ex.Message, StatusCode = "500" });
             }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var project = await _projectService.Get(id);
+            if (project is null)
+            {
+                return BadRequest("Project does not exist");
+            }
+
+            await _projectService.Delete(id);
+            return Ok();
         }
     }
 }
