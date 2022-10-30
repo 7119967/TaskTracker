@@ -15,9 +15,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskTracker.UI", "TaskTrack
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskTracker.Core", "TaskTracker.Core\TaskTracker.Core.csproj", "{9754CB0D-0CE7-45A2-9982-1DA28BAF4B27}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskTracker.Infrastructure", "TaskTracker.Infrastructure\TaskTracker.Infrastructure.csproj", "{3644BDA4-5CB6-4A53-A910-AC38E86095EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskTracker.Infrastructure", "TaskTracker.Infrastructure\TaskTracker.Infrastructure.csproj", "{3644BDA4-5CB6-4A53-A910-AC38E86095EC}"
 	ProjectSection(ProjectDependencies) = postProject
 		{9754CB0D-0CE7-45A2-9982-1DA28BAF4B27} = {9754CB0D-0CE7-45A2-9982-1DA28BAF4B27}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskTracker.UnitTests", "TaskTracker.UnitTests\TaskTracker.UnitTests.csproj", "{08248E0E-CCE5-4A23-AF9D-72980AA2397B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3644BDA4-5CB6-4A53-A910-AC38E86095EC} = {3644BDA4-5CB6-4A53-A910-AC38E86095EC}
+		{9754CB0D-0CE7-45A2-9982-1DA28BAF4B27} = {9754CB0D-0CE7-45A2-9982-1DA28BAF4B27}
+		{CC2B2B3F-2207-4C6F-AABE-84BF85F6A578} = {CC2B2B3F-2207-4C6F-AABE-84BF85F6A578}
 	EndProjectSection
 EndProject
 Global
@@ -46,6 +53,10 @@ Global
 		{3644BDA4-5CB6-4A53-A910-AC38E86095EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3644BDA4-5CB6-4A53-A910-AC38E86095EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3644BDA4-5CB6-4A53-A910-AC38E86095EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08248E0E-CCE5-4A23-AF9D-72980AA2397B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08248E0E-CCE5-4A23-AF9D-72980AA2397B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08248E0E-CCE5-4A23-AF9D-72980AA2397B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08248E0E-CCE5-4A23-AF9D-72980AA2397B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
