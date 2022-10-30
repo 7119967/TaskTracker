@@ -63,7 +63,7 @@ namespace TaskTracker.UnitTests
         }
 
         [Fact]
-        public async Task Post_Departament()
+        public async Task Post_Task()
         {
             try
             {
