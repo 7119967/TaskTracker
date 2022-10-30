@@ -1,3 +1,4 @@
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using TaskTracker.Core.Interfaces;
 using TaskTracker.Core.Services;
 using TaskTracker.Infrastructure.Data;
 using TaskTracker.Infrastructure.Repositories;
+using TaskTracker.Infrastructure.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,22 +45,46 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-builder.Services.AddControllers().AddNewtonsoftJson(x =>
+builder.Services
+    .AddAuthentication(x =>
+    {
+        x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Authentication:Issuer"],
+            ValidAudience = builder.Configuration["Authentication:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Authentication:SecretKey"]))
+        };
+    });
+
+builder.Services.AddControllers()
+    .AddNewtonsoftJson(x =>
             x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
+builder.Services.AddValidatorsFromAssemblyContaining<ProjectValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<TaskValidator>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-builder.Services.AddDbContext<DatabaseContext>(options => {
+builder.Services.AddDbContext<DatabaseContext>(options =>
+{
     options
         .UseLazyLoadingProxies()
         .UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
         .UseSnakeCaseNamingConvention();
 });
 
-builder.Services.AddMvc().AddFluentValidation(options => {
-    options.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
-});
-
+builder.Services.AddMvc();
 
 //builder.Services.AddScoped(typeof(DbContext), typeof(DatabaseContext));
 
@@ -72,24 +98,6 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
-builder.Services.AddAuthentication(x =>
-{
-    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-             .AddJwtBearer(options =>
-             {
-                 options.TokenValidationParameters = new TokenValidationParameters
-                 {
-                     ValidateIssuer = true,
-                     ValidateAudience = true,
-                     ValidateLifetime = true,
-                     ValidateIssuerSigningKey = true,
-                     ValidIssuer = app.Configuration["Authentication:Issuer"],
-                     ValidAudience = app.Configuration["Authentication:Audience"],
-                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(app.Configuration["Authentication:SecretKey"]))
-                 };
-             });
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
