@@ -1,11 +1,11 @@
 ﻿using TaskTracker.Core.Entities;
 using TaskTracker.Core.Interfaces;
 using TaskTracker.Infrastructure.Data;
-using Task = TaskTracker.Core.Entities.Task;
+using MyTask = TaskTracker.Core.Entities.MyTask;
 
 namespace TaskTracker.Infrastructure.Repositories
 {
-    public class TaskRepository : BaseRepository<Task>, ITaskRepository
+    public class TaskRepository : BaseRepository<MyTask>, ITaskRepository
     {
         public TaskRepository(DatabaseContext context) : base(context) { }
     }

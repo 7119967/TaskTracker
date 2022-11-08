@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using TaskTracker.API.Responses;
 using TaskTracker.Core.Entities;
 using TaskTracker.Core.Interfaces;

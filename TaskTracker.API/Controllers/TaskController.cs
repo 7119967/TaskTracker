@@ -3,7 +3,7 @@ using TaskTracker.API.Responses;
 using TaskTracker.Core.Interfaces;
 using TaskTracker.Core.QueryFilters;
 using TaskTracker.Core.Services;
-using Task = TaskTracker.Core.Entities.Task;
+using MyTask = TaskTracker.Core.Entities.MyTask;
 
 namespace TaskTracker.API.Controllers
 {
@@ -25,7 +25,7 @@ namespace TaskTracker.API.Controllers
             try
             {
                 var service = _taskService.TaskFilter(filterQuery);
-                var response = new ApiResponse<IEnumerable<Task>>(service);
+                var response = new ApiResponse<IEnumerable<MyTask>>(service);
                 return Ok(response);
             }
             catch (System.Exception ex)
@@ -40,7 +40,7 @@ namespace TaskTracker.API.Controllers
             try
             {
                 var service = _taskService.Gets();
-                var response = new ApiResponse<IEnumerable<Task>>(service);
+                var response = new ApiResponse<IEnumerable<MyTask>>(service);
                 return Ok(response);
             }
             catch (System.Exception ex)
@@ -55,7 +55,7 @@ namespace TaskTracker.API.Controllers
             try
             {
                 var service = await _taskService.Get(id);
-                var response = new ApiResponse<Task>(service);
+                var response = new ApiResponse<MyTask>(service);
                 return Ok(response);
             }
             catch (System.Exception ex)
@@ -65,12 +65,12 @@ namespace TaskTracker.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(Task item)
+        public async Task<IActionResult> Post(MyTask item)
         {
             try
             {
                 await _taskService.Insert(item);
-                var response = new ApiResponse<Task>(item);
+                var response = new ApiResponse<MyTask>(item);
                 return Ok(response);
             }
             catch (System.Exception ex)
@@ -80,7 +80,7 @@ namespace TaskTracker.API.Controllers
         }
 
         [HttpPut]
-        public IActionResult Put(Guid id, Task item)
+        public IActionResult Put(Guid id, MyTask item)
         {
             try
             {

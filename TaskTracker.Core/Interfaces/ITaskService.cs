@@ -1,5 +1,5 @@
 ﻿using TaskTracker.Core.QueryFilters;
-using MyTask = TaskTracker.Core.Entities.Task;
+using MyTask = TaskTracker.Core.Entities.MyTask;
 
 namespace TaskTracker.Core.Interfaces
 {

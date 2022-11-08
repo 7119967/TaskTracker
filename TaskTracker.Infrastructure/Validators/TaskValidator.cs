@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
-using Task = TaskTracker.Core.Entities.Task;
+using MyTask = TaskTracker.Core.Entities.MyTask;
 
 namespace TaskTracker.Infrastructure.Validators
 {
-    public class TaskValidator : AbstractValidator<Task>
+    public class TaskValidator : AbstractValidator<MyTask>
     {
         public TaskValidator()
         {

@@ -1,8 +1,8 @@
-﻿using Task = TaskTracker.Core.Entities.Task;
+﻿using MyTask = TaskTracker.Core.Entities.MyTask;
 
 namespace TaskTracker.Core.Interfaces
 {
-    public interface ITaskRepository : IRepository<Task>
+    public interface ITaskRepository : IRepository<MyTask>
     {
     }
 }

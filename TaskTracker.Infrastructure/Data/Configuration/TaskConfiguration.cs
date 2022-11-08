@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TaskTracker.Core.Entities;
-using Task = TaskTracker.Core.Entities.Task;
+using MyTask = TaskTracker.Core.Entities.MyTask;
 
 namespace TaskTracker.Infrastructure.Data.Configuration
 {
-    public class TaskConfiguration : IEntityTypeConfiguration<Task>
+    public class TaskConfiguration : IEntityTypeConfiguration<MyTask>
     {
-        public void Configure(EntityTypeBuilder<Task> entity)
+        public void Configure(EntityTypeBuilder<MyTask> entity)
         {
             entity.ToTable("projects");
 

@@ -1,6 +1,6 @@
 ﻿using TaskTracker.Core.Interfaces;
 using TaskTracker.Core.QueryFilters;
-using MyTask = TaskTracker.Core.Entities.Task;
+using MyTask = TaskTracker.Core.Entities.MyTask;
 using Task = System.Threading.Tasks.Task;
 
 namespace TaskTracker.Core.Services

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TaskTracker.Core.Entities;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
-using Task = TaskTracker.Core.Entities.Task;
+using MyTask = TaskTracker.Core.Entities.MyTask;
 
 namespace TaskTracker.Infrastructure.Data
 {
@@ -9,7 +9,7 @@ namespace TaskTracker.Infrastructure.Data
     { 
         public DbSet<Security> Securities { get; set; }
         public DbSet<Project> Projects { get; set; }
-        public DbSet<Task> Tasks { get; set; }
+        public DbSet<MyTask> Tasks { get; set; }
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {
         }

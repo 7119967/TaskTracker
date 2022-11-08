@@ -5,7 +5,7 @@ namespace TaskTracker.Core.Entities
 {
     public class BaseEntity
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         public DateTime? Create { get; set; }
         public DateTime? Modify { get; set; }
 
