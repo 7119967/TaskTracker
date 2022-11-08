@@ -1,39 +1,154 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 export class Home extends Component {
   static displayName = Home.name;
+  // static today = Date.now();
+  static today = new Intl.DateTimeFormat(this.locale, {month: '2-digit',day: '2-digit', year: 'numeric'}).format(Date.now())
 
   constructor(props) {
     super(props);
-    this.state = { projects: [], loading: true };
+    // this.state = { projects: [], loading: true };
+    this.state = { projects: [], name: "", startDate: this.today, completionDate: this.today, priority: "", status: "" };
+    // this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    // console.log(this.today);
   }
 
-  componentDidMount() {
-    this.getProjectsData();
+  // handleChange(e) {
+  //   this.setState({ priority: e.target.value});
+  // }
+  //name: e.target.value,  startDate: e.target.value, 
+
+  handleSubmit(e) {
+    e.preventDefault();
+    if (this.state.name.length === 0) {
+      return;
+    }
+    const newProject = {
+      id: this.state.projects.length + 1,
+      name: this.state.name,
+      startDate: this.state.startDate,
+      completionDate: this.state.completionDate,
+      priority: this.state.priority,
+      status: this.state.status,
+    };
+    this.setState((state) => ({
+      projects: state.projects.concat(newProject),
+      name: "",
+      startDate: this.today,
+      completionDate: this.today,
+      priority: "",
+      status: "",
+    }));
   }
-  
-  createProject() {
-    this.setState({
 
-    });
-  } 
-
-  editProject() {
-    this.setState({
-
-    });
-  }  
-  
-  deleteProject() {
-    this.setState({
-
-    });
-  }
-
-  static renderProjectsTable(projects) {
+  render() {
     return (
       <div>
-        <table className='table table-striped table-hover' aria-labelledby="tabelLabel">
+        <h3>Projects</h3>
+        <div>
+        </div>
+        <div className="row">
+          <div className="col-9">
+            <TodoList projects={this.state.projects} />
+          </div>
+          <div className="col-3">
+            <form onSubmit={this.handleSubmit}>
+              <div className="mb-3">
+                <label htmlFor="new-name" className="form-label">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="new-name"
+                  aria-describedby="emailHelp"
+                  onChange={(e) => this.setState({name: e.target.value})}
+                  value={this.state.name}
+                />
+                {/* <div id="emailHelp" className="form-text">
+                  We'll never share your email with anyone else.
+                </div> */}
+              </div>
+              <div className="mb-3">
+                <label htmlFor="new-priority" className="form-label">
+                  Priority
+                </label>
+                <select className="form-select" id="new-priority" required value={this.state.priority} onChange={(e) => this.setState({priority: e.target.value})}>
+                  <option selected>Open this select menu</option>
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                  <option value="3">Three</option>
+                </select>
+                {/* <div className="invalid-feedback">
+                  Пожалуйста, выберите корректный город.
+                </div> */}
+              </div>
+              <div className="mb-3">
+                <label htmlFor="new-startDate" className="form-label">
+                  StartDate
+                </label>
+                <input
+                  type="date"
+                  className="form-control"
+                  id="new-startDate"
+                  aria-describedby="emailHelp"
+                  onChange={(e) => this.setState({startDate: e.target.value})}
+                  value={this.today}
+                />
+                {/* <div id="emailHelp" className="form-text">
+                  We'll never share your email with anyone else.
+                </div> */}
+              </div>
+              <div className="mb-3">
+                <label htmlFor="new-completionDate" className="form-label">
+                  CompletionDate
+                </label>
+                <input
+                  type="date"
+                  className="form-control"
+                  id="new-completionDate"
+                  aria-describedby="emailHelp"
+                  onChange={(e) => this.setState({completionDate: e.target.value})}
+                  value={this.state.completionDate}
+                />
+                {/* <div id="emailHelp" className="form-text">
+                  We'll never share your email with anyone else.
+                </div> */}
+              </div>
+              <div className="mb-3">
+                <label htmlFor="new-status" className="form-label">
+                  Status
+                </label>
+                {/* <select className="form-select" id="new-status" required> */}
+                <select className="form-select" id="new-priority" required value={this.state.status} onChange={(e) => this.setState({status: e.target.value})}>
+                  <option selected>Open this select menu</option>
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                  <option value="3">Three</option>
+                </select>
+                {/* <div className="invalid-feedback">
+                  Пожалуйста, выберите корректный город.
+                </div> */}
+              </div>
+              <button type="submit" className="btn btn-primary mb-3">
+                Add #{this.state.projects.length + 1}
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+class TodoList extends React.Component {
+  render() {
+    return (
+      <div>
+        <table
+          className="table table-striped table-hover"
+          aria-labelledby="tabelLabel"
+        >
           <thead>
             <tr>
               <th scope="col">#</th>
@@ -42,10 +157,11 @@ export class Home extends Component {
               <th scope="col">StartDate</th>
               <th scope="col">CompletionDate</th>
               <th scope="col">Status</th>
+              <th scope="col">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {projects.map(project =>
+            {this.props.projects.map((project) => (
               <tr key={project.id}>
                 <th scope="row">{project.id}</th>
                 <td>{project.name}</td>
@@ -53,54 +169,31 @@ export class Home extends Component {
                 <td>{project.startDate}</td>
                 <td>{project.completionDate}</td>
                 <td>{project.status}</td>
-                <button className="btn btn-secondary" onClick={this.editProject}>Edit</button>
-                <button className="btn btn-danger" onClick={this.deleteProject}>Delete</button>
+                <td>
+                  <div className="row justify-content-evenly">
+                    <div className="col-4">
+                      <button
+                        className="btn btn-secondary"
+                        onClick={this.editProject}
+                      >
+                        Edit
+                      </button>
+                    </div>
+                    <div className="col-4">
+                      <button
+                        className="btn btn-danger"
+                        onClick={this.deleteProject}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </td>
               </tr>
-            )}
+            ))}
           </tbody>
         </table>
       </div>
     );
   }
-
-  render() {
-    let contents = this.state.loading
-      ? <p><em>Loading...</em></p>
-      : Home.renderProjectsTable(this.state.projects);
-
-    return (
-        <div>
-          <h1 id="tabelLabel">Projects</h1>
-          <p>This table demonstrates fetching data from the server.</p>
-          {contents}
-        </div>
-    );
-  }
-
-  async getProjectsData() {
-    const response = await fetch('http://localhost:5172/api/Project');
-    const data = await response.json();
-    this.setState({ projects: data, loading: false });
-  }
-
-/*   render() {
-    return (
-      <div>
-        <h1>Hello, world!</h1>
-        <p>Welcome to your new single-page application, built with:</p>
-        <ul>
-          <li><a href='https://get.asp.net/'>ASP.NET Core</a> and <a href='https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx'>C#</a> for cross-platform server-side code</li>
-          <li><a href='https://facebook.github.io/react/'>React</a> for client-side code</li>
-          <li><a href='http://getbootstrap.com/'>Bootstrap</a> for layout and styling</li>
-        </ul>
-        <p>To help you get started, we have also set up:</p>
-        <ul>
-          <li><strong>Client-side navigation</strong>. For example, click <em>Counter</em> then <em>Back</em> to return here.</li>
-          <li><strong>Development server integration</strong>. In development mode, the development server from <code>create-react-app</code> runs in the background automatically, so your client-side resources are dynamically built on demand and the page refreshes when you modify any file.</li>
-          <li><strong>Efficient production builds</strong>. In production mode, development-time features are disabled, and your <code>dotnet publish</code> configuration produces minified, efficiently bundled JavaScript files.</li>
-        </ul>
-        <p>The <code>ClientApp</code> subdirectory is a standard React application based on the <code>create-react-app</code> template. If you open a command prompt in that directory, you can run <code>npm</code> commands such as <code>npm test</code> or <code>npm install</code>.</p>
-      </div>
-    );
-  } */
 }
