@@ -4,13 +4,16 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json.Converters;
+using System.Reflection;
 using System.Text;
 using TaskTracker.Core.Interfaces;
+using TaskTracker.Core.QueryFilters;
 using TaskTracker.Core.Services;
 using TaskTracker.Infrastructure.Data;
 using TaskTracker.Infrastructure.Repositories;
 using TaskTracker.Infrastructure.Validators;
-
+//#pragma warning disable CS1591
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -43,6 +46,12 @@ builder.Services.AddSwaggerGen(options =>
             Url = new Uri("https://localhost/"),
         }
     });
+
+    // Set the comments path for the Swagger JSON and UI.
+    //var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    //var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    //options.IncludeXmlComments(xmlPath);
+    //options.SchemaFilter<EnumTypesSchemaFilter>(xmlPath);
 });
 
 builder.Services
@@ -67,7 +76,14 @@ builder.Services
 
 builder.Services.AddControllers()
     .AddNewtonsoftJson(x =>
-            x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
+    .AddNewtonsoftJson(o =>
+    {
+        o.SerializerSettings.Converters.Add(new StringEnumConverter
+        {
+            CamelCaseText = true
+        });
+    });
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
@@ -119,3 +135,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+#pragma warning restore CS1591
