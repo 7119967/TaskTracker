@@ -10,7 +10,7 @@ export class Project extends Component {
 
     getProjects = async () => {
         var response = await fetch(
-            'http://localhost:5172/api/Project',
+            'https://localhost:7172/api/Project',
             {
                 method: 'get'
             }

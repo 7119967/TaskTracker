@@ -1,3 +1,4 @@
+import React from 'react';
 import { Counter } from "./components/Counter";
 import { Project } from "./components/Project";
 import { FetchData } from "./components/FetchData";

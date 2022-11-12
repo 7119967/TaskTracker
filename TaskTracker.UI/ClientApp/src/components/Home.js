@@ -1,29 +1,44 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
+// import React, { Component, useEffect, useState } from 'react';
+// import axios from 'axios';
 
 export class Home extends Component {
   static displayName = Home.name;
-  // static today = Date.now();
-  static today = new Intl.DateTimeFormat(this.locale, {month: '2-digit',day: '2-digit', year: 'numeric'}).format(Date.now())
 
   constructor(props) {
     super(props);
-    // this.state = { projects: [], loading: true };
-    this.state = { projects: [], name: "", startDate: this.today, completionDate: this.today, priority: "", status: "" };
-    // this.handleChange = this.handleChange.bind(this);
+    this.state = {
+      projects: [],
+      name: "",
+      startDate: this.formatDate(Date.now()),
+      completionDate: "",
+      priority: "",
+      status: "",
+    };
     this.handleSubmit = this.handleSubmit.bind(this);
-    // console.log(this.today);
+    //this.today = this.formatDate(Date.now());
   }
 
-  // handleChange(e) {
-  //   this.setState({ priority: e.target.value});
-  // }
-  //name: e.target.value,  startDate: e.target.value, 
+  formatDate = (date) => {
+    let d = new Date(date);
+    let month = (d.getMonth() + 1).toString();
+    let day = d.getDate().toString();
+    let year = d.getFullYear();
+    if (month.length < 2) {
+      month = '0' + month;
+    }
+    if (day.length < 2) {
+      day = '0' + day;
+    }
+    return [year, month, day].join('-');
+  }
 
   handleSubmit(e) {
     e.preventDefault();
     if (this.state.name.length === 0) {
       return;
     }
+
     const newProject = {
       id: this.state.projects.length + 1,
       name: this.state.name,
@@ -32,11 +47,12 @@ export class Home extends Component {
       priority: this.state.priority,
       status: this.state.status,
     };
+
     this.setState((state) => ({
       projects: state.projects.concat(newProject),
       name: "",
-      startDate: this.today,
-      completionDate: this.today,
+      startDate: this.formatDate(Date.now()),
+      completionDate: "",
       priority: "",
       status: "",
     }));
@@ -45,9 +61,8 @@ export class Home extends Component {
   render() {
     return (
       <div>
-        <h3>Projects</h3>
-        <div>
-        </div>
+        <h3>{this.displayName} Projects</h3>
+        <div></div>
         <div className="row">
           <div className="col-9">
             <TodoList projects={this.state.projects} />
@@ -63,26 +78,26 @@ export class Home extends Component {
                   className="form-control"
                   id="new-name"
                   aria-describedby="emailHelp"
-                  onChange={(e) => this.setState({name: e.target.value})}
+                  onChange={(e) => this.setState({ name: e.target.value })}
                   value={this.state.name}
                 />
-                {/* <div id="emailHelp" className="form-text">
-                  We'll never share your email with anyone else.
-                </div> */}
               </div>
               <div className="mb-3">
                 <label htmlFor="new-priority" className="form-label">
                   Priority
                 </label>
-                <select className="form-select" id="new-priority" required value={this.state.priority} onChange={(e) => this.setState({priority: e.target.value})}>
+                <select
+                  className="form-select"
+                  id="new-priority"
+                  required
+                  value={this.state.priority}
+                  onChange={(e) => this.setState({ priority: e.target.value })}
+                >
                   <option selected>Open this select menu</option>
                   <option value="1">One</option>
                   <option value="2">Two</option>
                   <option value="3">Three</option>
                 </select>
-                {/* <div className="invalid-feedback">
-                  Пожалуйста, выберите корректный город.
-                </div> */}
               </div>
               <div className="mb-3">
                 <label htmlFor="new-startDate" className="form-label">
@@ -93,12 +108,9 @@ export class Home extends Component {
                   className="form-control"
                   id="new-startDate"
                   aria-describedby="emailHelp"
-                  onChange={(e) => this.setState({startDate: e.target.value})}
-                  value={this.today}
+                  onChange={(e) => this.setState({ startDate: e.target.value })}
+                  value={this.state.startDate}
                 />
-                {/* <div id="emailHelp" className="form-text">
-                  We'll never share your email with anyone else.
-                </div> */}
               </div>
               <div className="mb-3">
                 <label htmlFor="new-completionDate" className="form-label">
@@ -109,27 +121,28 @@ export class Home extends Component {
                   className="form-control"
                   id="new-completionDate"
                   aria-describedby="emailHelp"
-                  onChange={(e) => this.setState({completionDate: e.target.value})}
+                  onChange={(e) =>
+                    this.setState({ completionDate: e.target.value })
+                  }
                   value={this.state.completionDate}
                 />
-                {/* <div id="emailHelp" className="form-text">
-                  We'll never share your email with anyone else.
-                </div> */}
               </div>
               <div className="mb-3">
                 <label htmlFor="new-status" className="form-label">
                   Status
                 </label>
-                {/* <select className="form-select" id="new-status" required> */}
-                <select className="form-select" id="new-priority" required value={this.state.status} onChange={(e) => this.setState({status: e.target.value})}>
+                <select
+                  className="form-select"
+                  id="new-status"
+                  required
+                  value={this.state.status}
+                  onChange={(e) => this.setState({ status: e.target.value })}
+                >
                   <option selected>Open this select menu</option>
                   <option value="1">One</option>
                   <option value="2">Two</option>
                   <option value="3">Three</option>
                 </select>
-                {/* <div className="invalid-feedback">
-                  Пожалуйста, выберите корректный город.
-                </div> */}
               </div>
               <button type="submit" className="btn btn-primary mb-3">
                 Add #{this.state.projects.length + 1}

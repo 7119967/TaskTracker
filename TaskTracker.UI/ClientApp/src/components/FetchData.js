@@ -56,7 +56,7 @@ export class FetchData extends Component {
   }
 
   async getProjectsData() {
-    const response = await fetch('http://localhost:5172/api/Project');
+    const response = await fetch('https://localhost:7172/api/Project');
     const data = await response.json();
     this.setState({ projects: data, loading: false });
   }
