@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using TaskTracker.Core.Entities;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using MyTask = TaskTracker.Core.Entities.MyTask;
@@ -12,9 +13,12 @@ namespace TaskTracker.Infrastructure.Data
         public DbSet<MyTask> Tasks { get; set; }
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+            AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder.UseNpgsql(b => b.MigrationsAssembly("TaskTracker.API"));
+                            
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
