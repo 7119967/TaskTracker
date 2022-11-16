@@ -63,7 +63,7 @@ export class NavMenu extends Component {
                 <NavLink tag={Link} className="text-dark" to="/fetch-data">Fetch data</NavLink>
               </NavItem>
               <NavItem>
-                <button type="button" class="btn btn-primary">New Project</button>
+                <button type="button" className="btn btn-primary">New Project</button>
               </NavItem>
             </ul>
           </Collapse>
