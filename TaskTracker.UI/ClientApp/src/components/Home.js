@@ -2,10 +2,6 @@ import React, { Component } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-
-// import React, { Component, useEffect, useState } from 'react';
-// import axios from 'axios';
 
 export class Home extends Component {
   static displayName = Home.name;
@@ -21,13 +17,12 @@ export class Home extends Component {
       completionDate: "",
       priority: "",
       status: "",
-      loading: true
+      loading: true,
+      isEdit: false,
     };
-
-    // this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  saveFormData = async (newProject) => {
+  addNewProject = async (newProject) => {
     const response = await fetch('https://localhost:7172/api/Project', {
       headers: {
         'Content-Type': 'application/json',
@@ -40,33 +35,39 @@ export class Home extends Component {
     }
   }
 
-  // onSubmit = async (event) => {
-  //   event.preventDefault(); // Prevent default submission
-  //   try {
-  //     await this.saveFormData();
-  //     alert('Your registration was successfully submitted!');
-  //     this.setValues({
-  //       name: '', color: '', age: '', habits: '' 
-  //     });
-  //   } catch (e) {
-  //     alert(`Registration failed! ${e.message}`);
-  //   }
-  // }
+  updateProject = async (editProject) => {
+    const url = 'https://localhost:7172/api/Project/?id=';
+    const response = await fetch(url.concat(editProject.id), {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'PUT',
+      body: JSON.stringify(editProject)
+    });
+    if (response.status !== 200) {
+      throw new Error(`Request failed: ${response.status}`); 
+    }
+  }
 
-//  static deleteProject = async (e, id) => {
-//     e.preventDefault();
-//     let url = 'https://localhost:7172/api/' + {id};
-//     alert(url);
-//     const response = await fetch(url, {
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       method: 'DELETE'
-//     });
-//     if (response.status !== 200) {
-//       throw new Error(`Request failed: ${response.status}`); 
-//     }
-//   }
+  onDelete = async (id) => {
+
+    const url = 'https://localhost:7172/api/Project/';   
+
+    fetch(url.concat(id), { method: 'DELETE' })
+        .then(async response => {
+          this.getAllProjects();
+
+            if (!response.ok) {
+                const error = response.status;
+                return Promise.reject(error);
+            }
+
+            console.log('Delete successful');
+        })
+        .catch(error => {
+          console.error('There was an error!', error);
+        });
+  }
 
   formatDate = (date) => {
     let d = new Date(date);
@@ -83,26 +84,19 @@ export class Home extends Component {
   }
 
   componentDidMount() {
-    this.getProjectsData();
+    this.getAllProjects();
   }
 
-  async getProjectsData() {
+  async getAllProjects() {
     const response = await fetch('https://localhost:7172/api/Project');
     const data = await response.json();
     this.setState({ projects: data, loading: false });
   }
 
-  onSubmit = async () => {
-  // handleSubmit(e) {    
-    // event.preventDefault();
+  onAdd = async () => {
     if (this.state.name.length === 0) {
-      // event.preventDefault();
       return
     }
-
-    this.setState({
-      loading: true
-    });
 
     const newProject = {
       name: this.state.name,
@@ -113,40 +107,72 @@ export class Home extends Component {
     };
     
     try {
-      await this.saveFormData(newProject);
-      await this.getProjectsData();
-      // this.setState(() => ({projects: this.state.projects});
+      await this.addNewProject(newProject);
       this.setState(() => ({
-        projects: this.state.projects,
         name: "",
         startDate: this.formatDate(Date.now()),
         completionDate: "",
         priority: "",
         status: "",
       }));
-      // alert('Your registration was successfully submitted!');
     } catch (event) {
-      alert(`Registration failed! ${event.message}`);
+      alert(`Adding a new project failed! ${event.message}`);
     }
-    
-    // this.saveFormData(newProject);
-    // this.getProjectsData();
 
-    // this.setState(() => ({
-    //   // projects: this.state.projects,
-    //   name: "",
-    //   startDate: this.formatDate(Date.now()),
-    //   completionDate: "",
-    //   priority: "",
-    //   status: "",
-    // }));
-
-    // Home.renderTableProjects(this.state.projects);
-
-    // alert('Your registration was successfully submitted!');
+    await this.getAllProjects();
   }
 
-  static renderTableProjects (projects) {
+  onSave = async () => {
+    if (this.state.name.length === 0) {
+      return
+    }
+
+    const editProject = {
+      id: this.state.id,
+      name: this.state.name,
+      startDate: this.state.startDate,
+      completionDate: this.state.completionDate,
+      priority: this.state.priority,
+      status: this.state.status,
+    };
+    
+    try {
+      await this.updateProject(editProject);
+      this.setState(() => ({
+        name: "",
+        startDate: this.formatDate(Date.now()),
+        completionDate: "",
+        priority: "",
+        status: "",
+        // isEdit: false
+      }));
+    } catch (event) {
+      alert(`Adding a new project failed! ${event.message}`);
+    }
+
+    await this.getAllProjects();
+  }
+
+  onEdit = async (project_id) => {
+    if (this.state.id !== "") {
+      return
+    }
+
+    let editProject = this.state.projects.find((x) => x.id === project_id)
+
+    this.setState(() => ({
+      isEdit: true,
+      id: editProject.id,
+      name: editProject.name,
+      startDate: this.formatDate(editProject.startDate),
+      completionDate: this.formatDate(editProject.completionDate),
+      priority: editProject.priority,
+      status: editProject.status,
+    }));
+
+  }
+
+  renderTableProjects = (projects) => {
     let value = 1
     return (
       <div>
@@ -167,19 +193,18 @@ export class Home extends Component {
           </tr>
         </thead>
         <tbody>
-          {projects.map((project) => (
+          {projects.map((project, index) => (
             <tr key={project.id}>
               <th scope="row">{value++}</th>
-              {/* <td>{project.id.substring(0, 4)}</td> */}
-              <td>{project.id}</td>
+              <td>{project.id.substring(0, 4)}</td>
               <td>{project.name}</td>
               <td>{project.priority}</td>
               <td>{project.startDate.substring(0, 10)}</td>
               <td>{project.completionDate.substring(0, 10)}</td>
               <td>{project.status}</td>
               <td>
-                <button className="btn btn-secondary me-2" onClick={this.editProject}>Edit</button>
-                <button className="btn btn-danger" onClick={this.deleteProject}>Delete</button>
+                <button className="btn btn-secondary me-2" onClick={() => {this.onEdit(project.id)} }>Edit</button>
+                <button className="btn btn-danger" onClick={() => { this.onDelete(project.id) }}>Delete</button>
               </td>
             </tr>
           ))}
@@ -190,8 +215,8 @@ export class Home extends Component {
   }
 
   render() {
-    let contents = this.state.loading ? <p><em>Loading...</em></p> : Home.renderTableProjects(this.state.projects);
-
+    let contents = this.state.loading ? <p><em>Loading...</em></p> : this.renderTableProjects(this.state.projects);
+    let isEdit = this.state.isEdit;
     return (
       <>
         <h3>Projects</h3>
@@ -201,11 +226,18 @@ export class Home extends Component {
           </Col>
           <Col className="col-3">
             <Form>
+            <Form.Group className="mb-3" controlId="new-id">
+                <Form.Label>Id</Form.Label>
+                <Form.Control type="text" placeholder="" disabled
+                  onChange={(e) => this.setState({ id: e.target.value })}
+                  value={this.state.id}
+                  />
+              </Form.Group>
               <Form.Group className="mb-3" controlId="new-name">
                 <Form.Label>Name</Form.Label>
                 <Form.Control type="text" placeholder="Enter name of project" 
                   onChange={(e) => this.setState({ name: e.target.value })}
-                  value={this.state.name} 
+                  value={this.state.name}
                   />
                 <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
               </Form.Group>
@@ -244,7 +276,10 @@ export class Home extends Component {
                   <option value="3">Three</option>
                 </Form.Select>
               </Form.Group>
-              <Button className="mb-3" onClick={() => this.onSubmit()}>Add #{this.state.projects.length + 1}</Button>
+              {isEdit ? 
+              <button className="btn btn-success mb-3" onClick={() => this.onSave()}>Save</button>:
+              <button className="btn btn-primary mb-3" onClick={() => this.onAdd()}>Add #{this.state.projects.length + 1}</button>}
+              
             </Form>
           </Col>
         </Row>
