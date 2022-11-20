@@ -1,6 +1,7 @@
 import React from 'react';
 import { Home } from "./components/Home";
-import { Project } from "./components/Project";
+import { Projects } from "./components/Projects";
+import { Tasks } from "./components/Tasks";
 
 const AppRoutes = [
   {
@@ -8,8 +9,12 @@ const AppRoutes = [
     element: <Home />
   },
   {
-    path: '/project',
-    element: <Project />
+    path: '/projects',
+    element: <Projects />
+  },
+  {
+    path: '/tasks',
+    element: <Tasks />
   }
 ];
 

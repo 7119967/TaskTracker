@@ -3,6 +3,18 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 
+const priorities = [
+  {value: '1', text: 'High'},
+  {value: '2', text: 'Middle'},
+  {value: '3', text: 'Low'}
+];
+
+const statuses = [
+  {value: '0', text: 'Not Started'},
+  {value: '1', text: 'Active'},
+  {value: '2', text: 'Completed'}
+];
+
 export class Home extends Component {
   static displayName = Home.name;
 
@@ -22,7 +34,7 @@ export class Home extends Component {
     };
   }
 
-  addNewProject = async (newProject) => {
+  postProject = async (newProject) => {
     const response = await fetch('https://localhost:7172/api/Project', {
       headers: {
         'Content-Type': 'application/json',
@@ -35,7 +47,7 @@ export class Home extends Component {
     }
   }
 
-  updateProject = async (editProject) => {
+  putProject = async (editProject) => {
     const url = 'https://localhost:7172/api/Project/?id=';
     const response = await fetch(url.concat(editProject.id), {
       headers: {
@@ -49,7 +61,7 @@ export class Home extends Component {
     }
   }
 
-  onDelete = async (id) => {
+  deleteProject = async (id) => {
 
     const url = 'https://localhost:7172/api/Project/';   
 
@@ -83,6 +95,10 @@ export class Home extends Component {
     return [year, month, day].join('-');
   }
 
+  capitalizeText = (str) => {
+    return str[0].toUpperCase() + str.slice(1);
+  };
+
   componentDidMount() {
     this.getAllProjects();
   }
@@ -99,7 +115,7 @@ export class Home extends Component {
     }
 
     const newProject = {
-      name: this.state.name,
+      name: this.capitalizeText(this.state.name),
       startDate: this.state.startDate,
       completionDate: this.state.completionDate,
       priority: this.state.priority,
@@ -107,7 +123,7 @@ export class Home extends Component {
     };
     
     try {
-      await this.addNewProject(newProject);
+      await this.postProject(newProject);
       this.setState(() => ({
         name: "",
         startDate: this.formatDate(Date.now()),
@@ -129,7 +145,7 @@ export class Home extends Component {
 
     const editProject = {
       id: this.state.id,
-      name: this.state.name,
+      name: this.capitalizeText(this.state.name),
       startDate: this.state.startDate,
       completionDate: this.state.completionDate,
       priority: this.state.priority,
@@ -137,17 +153,16 @@ export class Home extends Component {
     };
     
     try {
-      await this.updateProject(editProject);
+      await this.putProject(editProject);
       this.setState(() => ({
         name: "",
         startDate: this.formatDate(Date.now()),
         completionDate: "",
         priority: "",
         status: "",
-        // isEdit: false
       }));
     } catch (event) {
-      alert(`Adding a new project failed! ${event.message}`);
+      alert(`Updating the project failed! ${event.message}`);
     }
 
     await this.getAllProjects();
@@ -172,8 +187,27 @@ export class Home extends Component {
 
   }
 
+  onDelete = async (project_id) => {
+    return await this.deleteProject(project_id)
+  }
+
+  onCancel = async () => {
+      this.setState(() => ({
+        id: "",
+        name: "",
+        startDate: this.formatDate(Date.now()),
+        completionDate: "",
+        priority: "",
+        status: "",
+        loading: true,
+        isEdit: false,
+      }));
+
+    await this.getAllProjects();
+  }
+
   renderTableProjects = (projects) => {
-    let value = 1
+    let currentRow = 1
     return (
       <div>
       <table
@@ -193,15 +227,15 @@ export class Home extends Component {
           </tr>
         </thead>
         <tbody>
-          {projects.map((project, index) => (
+          {projects.map((project) => (
             <tr key={project.id}>
-              <th scope="row">{value++}</th>
+              <th scope="row">{currentRow++}</th>
               <td>{project.id.substring(0, 4)}</td>
-              <td>{project.name}</td>
-              <td>{project.priority}</td>
+              <td>{this.capitalizeText(project.name)}</td>
+              <td>{this.capitalizeText(project.priority)}</td>
               <td>{project.startDate.substring(0, 10)}</td>
               <td>{project.completionDate.substring(0, 10)}</td>
-              <td>{project.status}</td>
+              <td>{this.capitalizeText(project.status)}</td>
               <td>
                 <button className="btn btn-secondary me-2" onClick={() => {this.onEdit(project.id)} }>Edit</button>
                 <button className="btn btn-danger" onClick={() => { this.onDelete(project.id) }}>Delete</button>
@@ -217,6 +251,7 @@ export class Home extends Component {
   render() {
     let contents = this.state.loading ? <p><em>Loading...</em></p> : this.renderTableProjects(this.state.projects);
     let isEdit = this.state.isEdit;
+
     return (
       <>
         <h3>Projects</h3>
@@ -243,11 +278,14 @@ export class Home extends Component {
               </Form.Group>
               <Form.Group className="mb-3" controlId="new-priority">
                 <Form.Label>Priority</Form.Label>
-                <Form.Select id="new-priority" value={this.state.priority} onChange={(e) => this.setState({ priority: e.target.value })}>
-                  <option value="DEFAULT">Choose ...</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
+                <Form.Select id="new-priority" onChange={(e) => this.setState({ priority: e.target.value })}>
+                <option value="DEFAULT">Choose ...</option>
+                {priorities.map(item => {
+                  return (
+                    <option key={item.value} value={item.value}>{item.text}</option>)
+                  })
+                }          
+                 
                 </Form.Select>
                 <Form.Control.Feedback type="invalid">
                   Please provide a valid zip.
@@ -271,13 +309,17 @@ export class Home extends Component {
                 <Form.Label>Status</Form.Label>
                 <Form.Select id="new-status" value={this.state.status} onChange={(e) => this.setState({ status: e.target.value })}>
                   <option value="DEFAULT">Choose ...</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
+                  {statuses.map(item => {
+                    return (<option key={item.value} value={item.value}>{item.text}</option>);
+                  })}
                 </Form.Select>
               </Form.Group>
-              {isEdit ? 
-              <button className="btn btn-success mb-3" onClick={() => this.onSave()}>Save</button>:
+              {isEdit ?
+              <>
+                <button className="btn btn-success mb-3 me-2" onClick={() => this.onSave()}>Save</button>
+                <button className="btn btn-danger mb-3" onClick={() => this.onCancel()}>Cancel</button>
+              </> 
+              :
               <button className="btn btn-primary mb-3" onClick={() => this.onAdd()}>Add #{this.state.projects.length + 1}</button>}
               
             </Form>
