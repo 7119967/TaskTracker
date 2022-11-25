@@ -4,10 +4,11 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Offcanvas from 'react-bootstrap/Offcanvas';
+import { isNotEmpty } from "../infrastructure/helpers/validator";
 import { useState, useEffect } from 'react'
-import { formatDate, capitalizeText } from "../infrastructure/common";
+import { formatDate, capitalizeText, priorities, statuses } from "../infrastructure/common";
 
-const priorities = [
+/* const priorities = [
   { value: "Default", text: "Choose ..." },
   { value: "1", text: "High" },
   { value: "2", text: "Middle" },
@@ -19,7 +20,7 @@ const statuses = [
   { value: "0", text: "Not Started" },
   { value: "1", text: "Active" },
   { value: "2", text: "Completed" },
-];
+]; */
 
 const OffcanvasForm = ({ name, ...props }) => {
 
@@ -33,7 +34,7 @@ const OffcanvasForm = ({ name, ...props }) => {
 
   const handleClose = () => {
     setShow(!props.show); 
-    props.updateStateShowModal(!props.show)
+    props.updateStateShowOffcanvasForm(!props.show)
   }
 
   const getAllProjects = () => {
@@ -51,12 +52,161 @@ const OffcanvasForm = ({ name, ...props }) => {
     
     <Offcanvas show={show} onHide={handleClose} {...props}>
         <Offcanvas.Header closeButton>
-            <Offcanvas.Title>Offcanvas</Offcanvas.Title>
+            <Offcanvas.Title>Offcanvas {name}</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-        {name}
-            Some text as placeholder. In real life you can have the elements you
-            have chosen. Like, text, images, lists, etc.
+        
+        <Form needs-validation="true">
+              <Form.Control
+                type="text"
+                className="d-none"
+                onChange={(e) => this.setState({ create: e.target.value })}
+                // value={this.state.create}
+              />
+
+              <Form.Control
+                type="text"
+                className="d-none"
+                // onChange={(e) => this.setState({ modify: e.target.value })}
+                // value={this.state.modify}
+              />
+
+              <Form.Group className="mb-3 d-none" controlId="form-id">
+                <Form.Label>Id</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder=""
+                  disabled
+                //   onChange={(e) => this.setState({ id: e.target.value })}
+                //   value={this.state.id}
+                />
+              </Form.Group>
+
+              <Form.Group
+                className="mb-3"
+                controlId="form-name"
+                // validation={isNotEmpty(this.state.name)}
+              >
+                <Form.Label>Name</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter name of project"
+                //   onChange={(e) => this.setState({ name: e.target.value })}
+                //   value={this.state.name}
+                />
+                <Form.Control.Feedback type="valid">
+                  Looks good!
+                </Form.Control.Feedback>
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="form-priority">
+                <Form.Label>Priority</Form.Label>
+                <Form.Select
+                  id="form-priority"
+                //   onChange={(e) => this.setState({ priority: e.target.value })}
+                >
+    {/*               {priorities.map((item) => {
+                    if (
+                      this.state.priority.toLowerCase() ===
+                      item.text.toLowerCase()
+                    ) {
+                      console.log(this.state.priority + " " + item.text);
+                      return (
+                        <option key={item.value} value={item.value} selected>
+                          {item.text}
+                        </option>
+                      );
+                    }
+                    return (
+                      <option key={item.value} value={item.value}>
+                        {item.text}
+                      </option>
+                    );
+                  })} */}
+
+                </Form.Select>
+                <Form.Control.Feedback type="invalid">
+                  Please provide a valid zip.
+                </Form.Control.Feedback>
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="form-startDate">
+                <Form.Label>StartDate</Form.Label>
+                <Form.Control
+                  type="date"
+                //   onChange={(e) => this.setState({ startDate: e.target.value })}
+                //   value={this.state.startDate}
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="form-completionDate">
+                <Form.Label>CompletionDate</Form.Label>
+                <Form.Control
+                  type="date"
+                //   onChange={(e) =>
+                //     this.setState({ completionDate: e.target.value })
+                //   }
+                //   value={this.state.completionDate}
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="form-status">
+                <Form.Label>Status</Form.Label>
+                <Form.Select
+                  id="form-status"
+                  onChange={(e) => this.setState({ status: e.target.value })}
+                >
+{/*                   {statuses.map((item) => {
+                    if (
+                      this.state.status.toLowerCase() ===
+                      item.text.toLowerCase().replace(" ", "")
+                    ) {
+                      console.log(
+                        this.state.status.toLowerCase() +
+                          " " +
+                          item.text.toLowerCase().replace(" ", "")
+                      );
+                      return (
+                        <option key={item.value} value={item.value} selected>
+                          {item.text}
+                        </option>
+                      );
+                    }
+                    return (
+                      <option key={item.value} value={item.value}>
+                        {item.text}
+                      </option>
+                    );
+                  })} */}
+
+                </Form.Select>
+              </Form.Group>
+
+{/*               {this.state.isEdit ? (
+                <>
+                  <button
+                    className="btn btn-success mb-3 me-2"
+                    onClick={() => this.onSave()}
+                  >
+                    Save
+                  </button>
+                  <button
+                    className="btn btn-danger mb-3"
+                    onClick={() => this.onCancel()}
+                  >
+                    Cancel
+                  </button>
+                </>
+              ) : (
+                <button
+                  className="btn btn-primary mb-3"
+                  onClick={() => this.onAdd()}
+                >
+                  Add #{this.state.projects.length + 1}
+                </button>
+              )} */}
+
+            </Form>
         </Offcanvas.Body>
     </Offcanvas>
 

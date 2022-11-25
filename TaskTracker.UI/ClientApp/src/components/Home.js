@@ -3,22 +3,9 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import OffcanvasForm from "./OffcanvasForm";
+import ModalForm from "./ModalForm";
 import { isNotEmpty } from "../infrastructure/helpers/validator";
-import { formatDate, capitalizeText } from "../infrastructure/common";
-
-const priorities = [
-  { value: "Default", text: "Choose ..." },
-  { value: "1", text: "High" },
-  { value: "2", text: "Middle" },
-  { value: "3", text: "Low" },
-];
-
-const statuses = [
-  { value: "Default", text: "Choose ..." },
-  { value: "0", text: "Not Started" },
-  { value: "1", text: "Active" },
-  { value: "2", text: "Completed" },
-];
+import { formatDate, capitalizeText, priorities, statuses } from "../infrastructure/common";
 
 export class Home extends Component {
   static displayName = Home.name;
@@ -217,13 +204,29 @@ export class Home extends Component {
     this.getAllProjects();
   };
   
-  updateStateShowModal = (value) => {
+  updateStateShowOffcanvasForm = (value) => {
     this.setState({ 
       show: value 
     });
 
     console.log(this.state.show)
   }
+
+  showOffcanvasForm(){
+    this.setState({
+      show: !this.state.show
+    });
+
+    console.log(!this.state.show)
+  }
+
+  updateStateShowModal = (value) => {
+    this.setState({ 
+      show: value 
+    });
+
+    console.log(this.state.show)
+ }
 
   showModal(){
     this.setState({
@@ -258,7 +261,7 @@ export class Home extends Component {
               <tr key={project.id}>
                 <th scope="row">{currentRow++}</th>
                 <td>{project.id.substring(0, 4)}</td>
-                <td>{capitalizeText(project.name)}</td>
+                <td><a href="#" onClick={() => this.showModal()}>{capitalizeText(project.name)}</a></td>
                 <td>{capitalizeText(project.priority)}</td>
                 <td>{project.startDate.substring(0, 10)}</td>
                 <td>{project.completionDate.substring(0, 10)}</td>
@@ -270,7 +273,8 @@ export class Home extends Component {
                     data-bs-target="#offcanvasRight"
                     aria-controls="offcanvasRight"
                     onClick={() => {
-                      this.onEdit(project.id);
+                      // this.onEdit(project.id);
+                      this.showOffcanvasForm();
                     }}
                   >
                     Edit
@@ -283,13 +287,13 @@ export class Home extends Component {
                   >
                     Delete
                   </button>
-
+{/* 
                   <button
                     className="btn btn-primary"
                     onClick={() => {this.showModal()}}
                   >
                     Offcanvas
-                  </button>
+                  </button> */}
 
                 </td>
               </tr>
@@ -311,13 +315,13 @@ export class Home extends Component {
 
     return (
       <>
+        <OffcanvasForm placement='end' name='end' show={this.state.show} updateStateShowOffcanvasForm={this.updateStateShowOffcanvasForm}/>
+        <ModalForm show={this.state.show} updateStateShowModal={this.updateStateShowModal}/>
         <h3>Projects</h3>
         <Row>
-          <Col className="col-9">{contents}</Col>
+          <Col className="col-12">{contents}</Col>
 
-          <OffcanvasForm placement='end' name='end' show={this.state.show} updateStateShowModal={this.updateStateShowModal}/>
-
-          <Col className="col-3">
+{/*           <Col className="col-3">
             <Form needs-validation="true">
               <Form.Control
                 type="text"
@@ -466,7 +470,8 @@ export class Home extends Component {
                 </button>
               )}
             </Form>
-          </Col>
+          </Col> */}
+
         </Row>
       </>
     );
