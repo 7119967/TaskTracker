@@ -10,6 +10,8 @@ export const formatDate = (date) => {
       day = '0' + day;
     }
 
+    // console.log(new Date(date).toLocaleDateString())
+
     return [year, month, day].join('-');
   }
 

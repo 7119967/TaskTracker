@@ -2,17 +2,18 @@ import React, { Component } from 'react';
 import { Collapse, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import './NavMenu.css';
+import ModalForm from "./ModalForm";
 
 export class NavMenu extends Component {
   static displayName = NavMenu.name;
-  
 
   constructor (props) {
     super(props);
 
     this.toggleNavbar = this.toggleNavbar.bind(this);
     this.state = {
-      collapsed: true
+      collapsed: true,
+      show: false,
     };
   }
 
@@ -20,6 +21,22 @@ export class NavMenu extends Component {
     this.setState({
       collapsed: !this.state.collapsed
     });
+  }
+
+  updateStateShowModal = (value) => {
+    this.setState({ 
+      show: value 
+    });
+
+    console.log(this.state.show)
+ }
+
+  showModal(){
+    this.setState({
+      show: !this.state.show
+    });
+
+    console.log(!this.state.show)
   }
 
   render() {
@@ -40,7 +57,8 @@ export class NavMenu extends Component {
                 <NavLink tag={Link} className="text-dark" to="/tasks">Tasks</NavLink>
               </NavItem>
               <NavItem>
-                <button type="button" className="btn btn-primary">New Project</button>
+                <button type="button" className="btn btn-primary" onClick={() => this.showModal()}>New Project</button>
+                <ModalForm show={this.state.show} updateStateShowModal={this.updateStateShowModal}/>
               </NavItem>
             </ul>
           </Collapse>

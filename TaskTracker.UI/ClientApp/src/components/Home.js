@@ -137,10 +137,6 @@ export class Home extends Component {
     this.getAllProjects();
   }
 
-/*   componentWillUnmount() {
-    this.setDefaultValues();
-  } */
-
   onAdd = async () => {
     if (this.state.name.length === 0) {
       return;
@@ -214,13 +210,15 @@ export class Home extends Component {
   };
 
   onDelete = (project_id) => {
-    return this.deleteProject(project_id);
+    this.deleteProject(project_id);
   };
 
   onCancel = () => {
-    this.setDefaultValues();
+    // this.setDefaultValues();
     this.getAllProjects();
+    // this.componentDidMount();
   };
+
 
   renderTableProjects = (projects) => {
     let currentRow = 1;
@@ -286,13 +284,14 @@ export class Home extends Component {
     ) : (
       this.renderTableProjects(this.state.projects)
     );
+
     return (
       <>
         <h3>Projects</h3>
         <Row>
           <Col className="col-9">{contents}</Col>
           <Col className="col-3">
-            <Form>
+            <Form needs-validation="true">
               <Form.Control
                 type="text"
                 className="d-none"
@@ -307,7 +306,7 @@ export class Home extends Component {
                 value={this.state.modify}
               />
 
-              <Form.Group className="mb-3 d-none" controlId="new-id">
+              <Form.Group className="mb-3 d-none" controlId="form-id">
                 <Form.Label>Id</Form.Label>
                 <Form.Control
                   type="text"
@@ -320,7 +319,7 @@ export class Home extends Component {
 
               <Form.Group
                 className="mb-3"
-                controlId="new-name"
+                controlId="form-name"
                 validation={isNotEmpty(this.state.name)}
               >
                 <Form.Label>Name</Form.Label>
@@ -330,30 +329,35 @@ export class Home extends Component {
                   onChange={(e) => this.setState({ name: e.target.value })}
                   value={this.state.name}
                 />
-                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                <Form.Control.Feedback type="valid">Looks good!</Form.Control.Feedback>
               </Form.Group>
 
-              <Form.Group className="mb-3" controlId="new-priority">
+              <Form.Group className="mb-3" controlId="form-priority">
                 <Form.Label>Priority</Form.Label>
                 <Form.Select
-                  id="new-priority"
+                  id="form-priority"
                   onChange={(e) => this.setState({ priority: e.target.value })}
                 >
-                  {/* <option value="DEFAULT">Choose ...</option> */}
                   {priorities.map((item) => {
+
+                    if(this.state.priority.toLowerCase() === item.text.toLowerCase()){
+                      console.log(this.state.priority + " " + item.text)
+                      return (
+                      <option key={item.value} value={item.value} selected>{item.text}</option>
+                    );
+                    }
                     return (
-                      <option key={item.value} value={item.value}>
-                        {item.text}
-                      </option>
+                      <option key={item.value} value={item.value}>{item.text}</option>
                     );
                   })}
+
                 </Form.Select>
                 <Form.Control.Feedback type="invalid">
                   Please provide a valid zip.
                 </Form.Control.Feedback>
               </Form.Group>
 
-              <Form.Group className="mb-3" controlId="new-startDate">
+              <Form.Group className="mb-3" controlId="form-startDate">
                 <Form.Label>StartDate</Form.Label>
                 <Form.Control
                   type="date"
@@ -362,7 +366,7 @@ export class Home extends Component {
                 />
               </Form.Group>
 
-              <Form.Group className="mb-3" controlId="new-completionDate">
+              <Form.Group className="mb-3" controlId="form-completionDate">
                 <Form.Label>CompletionDate</Form.Label>
                 <Form.Control
                   type="date"
@@ -373,21 +377,36 @@ export class Home extends Component {
                 />
               </Form.Group>
 
-              <Form.Group className="mb-3" controlId="new-status">
+              <Form.Group className="mb-3" controlId="form-status">
                 <Form.Label>Status</Form.Label>
                 <Form.Select
-                  id="new-status"
-                  value={this.state.status}
+                  id="form-status"
+                  // value={this.state.status}
                   onChange={(e) => this.setState({ status: e.target.value })}
                 >
                   {/* <option value="DEFAULT">Choose ...</option> */}
-                  {statuses.map((item) => {
+{/*                   {statuses.map((item) => {
                     return (
                       <option key={item.value} value={item.value}>
                         {item.text}
                       </option>
                     );
+                  })} */}
+
+                  {statuses.map((item) => {
+                    console.log(this.state.status.toLowerCase() + " " + item.text.toLowerCase().replace(" ", ''))
+                    if(this.state.status.toLowerCase() === item.text.toLowerCase().replace(" ", '')){
+                      console.log(this.state.status.toLowerCase() + " " + item.text.toLowerCase().trim())
+                      return (
+                      <option key={item.value} value={item.value} selected>{item.text}</option>
+                    );
+                    }
+                    return (
+                      <option key={item.value} value={item.value}>{item.text}</option>
+                    );
                   })}
+
+
                 </Form.Select>
               </Form.Group>
 
