@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
+import OffcanvasForm from "./OffcanvasForm";
 import { isNotEmpty } from "../infrastructure/helpers/validator";
 import { formatDate, capitalizeText } from "../infrastructure/common";
 
@@ -37,6 +38,7 @@ export class Home extends Component {
       status: "Default",
       loading: true,
       isEdit: false,
+      show: false,
     };
 
     // this.setDefaultValues = this.setDefaultValues.bind(this);
@@ -122,15 +124,15 @@ export class Home extends Component {
         console.error("There was an error!", error);
       });
 
-      if(this.state.projects.length === 0){
-        this.setDefaultValues();
-      }
+    if (this.state.projects.length === 0) {
+      this.setDefaultValues();
+    }
   };
 
   async getAllProjects() {
-    const response = await fetch('https://localhost:7172/api/Project');
+    const response = await fetch("https://localhost:7172/api/Project");
     const data = await response.json();
-    this.setState({ projects: data, loading: false });   
+    this.setState({ projects: data, loading: false });
   }
 
   componentDidMount() {
@@ -177,22 +179,20 @@ export class Home extends Component {
       status: this.state.status,
     };
 
-    console.log(editProject.id + ' got for saving')
-    
+    console.log(editProject.id + " got for saving");
+
     try {
       this.putProject(editProject);
     } catch (event) {
       console.error(event.message);
     }
-
-    this.componentDidMount();
   };
 
   onEdit = (project_id) => {
     if (this.state.id !== "") {
       return;
     }
-    console.log(project_id + ' got for editing')
+    console.log(project_id + " got for editing");
 
     let editProject = this.state.projects.find((x) => x.id === project_id);
 
@@ -214,11 +214,24 @@ export class Home extends Component {
   };
 
   onCancel = () => {
-    // this.setDefaultValues();
     this.getAllProjects();
-    // this.componentDidMount();
   };
+  
+  updateStateShowModal = (value) => {
+    this.setState({ 
+      show: value 
+    });
 
+    console.log(this.state.show)
+  }
+
+  showModal(){
+    this.setState({
+      show: !this.state.show
+    });
+
+    console.log(!this.state.show)
+  }
 
   renderTableProjects = (projects) => {
     let currentRow = 1;
@@ -253,6 +266,9 @@ export class Home extends Component {
                 <td>
                   <button
                     className="btn btn-secondary me-2"
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasRight"
+                    aria-controls="offcanvasRight"
                     onClick={() => {
                       this.onEdit(project.id);
                     }}
@@ -267,6 +283,14 @@ export class Home extends Component {
                   >
                     Delete
                   </button>
+
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => {this.showModal()}}
+                  >
+                    Offcanvas
+                  </button>
+
                 </td>
               </tr>
             ))}
@@ -290,6 +314,9 @@ export class Home extends Component {
         <h3>Projects</h3>
         <Row>
           <Col className="col-9">{contents}</Col>
+
+          <OffcanvasForm placement='end' name='end' show={this.state.show} updateStateShowModal={this.updateStateShowModal}/>
+
           <Col className="col-3">
             <Form needs-validation="true">
               <Form.Control
@@ -329,7 +356,9 @@ export class Home extends Component {
                   onChange={(e) => this.setState({ name: e.target.value })}
                   value={this.state.name}
                 />
-                <Form.Control.Feedback type="valid">Looks good!</Form.Control.Feedback>
+                <Form.Control.Feedback type="valid">
+                  Looks good!
+                </Form.Control.Feedback>
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="form-priority">
@@ -339,18 +368,23 @@ export class Home extends Component {
                   onChange={(e) => this.setState({ priority: e.target.value })}
                 >
                   {priorities.map((item) => {
-
-                    if(this.state.priority.toLowerCase() === item.text.toLowerCase()){
-                      console.log(this.state.priority + " " + item.text)
+                    if (
+                      this.state.priority.toLowerCase() ===
+                      item.text.toLowerCase()
+                    ) {
+                      console.log(this.state.priority + " " + item.text);
                       return (
-                      <option key={item.value} value={item.value} selected>{item.text}</option>
-                    );
+                        <option key={item.value} value={item.value} selected>
+                          {item.text}
+                        </option>
+                      );
                     }
                     return (
-                      <option key={item.value} value={item.value}>{item.text}</option>
+                      <option key={item.value} value={item.value}>
+                        {item.text}
+                      </option>
                     );
                   })}
-
                 </Form.Select>
                 <Form.Control.Feedback type="invalid">
                   Please provide a valid zip.
@@ -381,32 +415,30 @@ export class Home extends Component {
                 <Form.Label>Status</Form.Label>
                 <Form.Select
                   id="form-status"
-                  // value={this.state.status}
                   onChange={(e) => this.setState({ status: e.target.value })}
                 >
-                  {/* <option value="DEFAULT">Choose ...</option> */}
-{/*                   {statuses.map((item) => {
+                  {statuses.map((item) => {
+                    if (
+                      this.state.status.toLowerCase() ===
+                      item.text.toLowerCase().replace(" ", "")
+                    ) {
+                      console.log(
+                        this.state.status.toLowerCase() +
+                          " " +
+                          item.text.toLowerCase().replace(" ", "")
+                      );
+                      return (
+                        <option key={item.value} value={item.value} selected>
+                          {item.text}
+                        </option>
+                      );
+                    }
                     return (
                       <option key={item.value} value={item.value}>
                         {item.text}
                       </option>
                     );
-                  })} */}
-
-                  {statuses.map((item) => {
-                    console.log(this.state.status.toLowerCase() + " " + item.text.toLowerCase().replace(" ", ''))
-                    if(this.state.status.toLowerCase() === item.text.toLowerCase().replace(" ", '')){
-                      console.log(this.state.status.toLowerCase() + " " + item.text.toLowerCase().trim())
-                      return (
-                      <option key={item.value} value={item.value} selected>{item.text}</option>
-                    );
-                    }
-                    return (
-                      <option key={item.value} value={item.value}>{item.text}</option>
-                    );
                   })}
-
-
                 </Form.Select>
               </Form.Group>
 
