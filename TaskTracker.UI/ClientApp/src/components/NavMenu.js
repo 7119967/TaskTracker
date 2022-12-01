@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Collapse, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import './NavMenu.css';
-import ModalForm from "./ModalForm";
+import AddNewProjectForm from "./AddNewProjectForm";
 
 export class NavMenu extends Component {
   static displayName = NavMenu.name;
@@ -28,7 +28,7 @@ export class NavMenu extends Component {
       show: value 
     });
 
-    console.log(this.state.show)
+    // console.log(this.state.show)
  }
 
   showModal(){
@@ -36,7 +36,7 @@ export class NavMenu extends Component {
       show: !this.state.show
     });
 
-    console.log(!this.state.show)
+    // console.log(!this.state.show)
   }
 
   render() {
@@ -58,11 +58,11 @@ export class NavMenu extends Component {
               </NavItem>
               <NavItem>
                 <button type="button" className="btn btn-primary" onClick={() => this.showModal()}>New Project</button>
-                <ModalForm show={this.state.show} updateStateShowModal={this.updateStateShowModal}/>
               </NavItem>
             </ul>
           </Collapse>
         </Navbar>
+        <AddNewProjectForm show={this.state.show} updateStateShowModal={this.updateStateShowModal}/>
       </header>
     );
   }

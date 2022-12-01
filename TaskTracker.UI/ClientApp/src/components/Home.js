@@ -5,7 +5,12 @@ import Form from "react-bootstrap/Form";
 import OffcanvasForm from "./OffcanvasForm";
 import ModalForm from "./ModalForm";
 import { isNotEmpty } from "../infrastructure/helpers/validator";
-import { formatDate, capitalizeText, priorities, statuses } from "../infrastructure/common";
+import { 
+  formatDate, 
+  capitalizeText, 
+  priorities, 
+  projectStatuses 
+} from "../infrastructure/common";
 
 export class Home extends Component {
   static displayName = Home.name;
@@ -261,7 +266,7 @@ export class Home extends Component {
               <tr key={project.id}>
                 <th scope="row">{currentRow++}</th>
                 <td>{project.id.substring(0, 4)}</td>
-                <td><a href="#" onClick={() => this.showModal()}>{capitalizeText(project.name)}</a></td>
+                <td><a onClick={() => this.showModal()}>{capitalizeText(project.name)}</a></td>
                 <td>{capitalizeText(project.priority)}</td>
                 <td>{project.startDate.substring(0, 10)}</td>
                 <td>{project.completionDate.substring(0, 10)}</td>
@@ -321,7 +326,7 @@ export class Home extends Component {
         <Row>
           <Col className="col-12">{contents}</Col>
 
-{/*           <Col className="col-3">
+          <Col className="col-3">
             <Form needs-validation="true">
               <Form.Control
                 type="text"
@@ -421,7 +426,7 @@ export class Home extends Component {
                   id="form-status"
                   onChange={(e) => this.setState({ status: e.target.value })}
                 >
-                  {statuses.map((item) => {
+                  {projectStatuses.map((item) => {
                     if (
                       this.state.status.toLowerCase() ===
                       item.text.toLowerCase().replace(" ", "")
@@ -470,7 +475,7 @@ export class Home extends Component {
                 </button>
               )}
             </Form>
-          </Col> */}
+          </Col> 
 
         </Row>
       </>

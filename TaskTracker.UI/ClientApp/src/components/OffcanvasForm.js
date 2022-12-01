@@ -1,30 +1,16 @@
 import React from "react";
-import Button from 'react-bootstrap/Button';
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+// import Button from 'react-bootstrap/Button';
+// import Row from "react-bootstrap/Row";
+// import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Offcanvas from 'react-bootstrap/Offcanvas';
-import { isNotEmpty } from "../infrastructure/helpers/validator";
+// import { isNotEmpty } from "../infrastructure/helpers/validator";
 import { useState, useEffect } from 'react'
-import { formatDate, capitalizeText, priorities, statuses } from "../infrastructure/common";
-
-/* const priorities = [
-  { value: "Default", text: "Choose ..." },
-  { value: "1", text: "High" },
-  { value: "2", text: "Middle" },
-  { value: "3", text: "Low" },
-];
-
-const statuses = [
-  { value: "Default", text: "Choose ..." },
-  { value: "0", text: "Not Started" },
-  { value: "1", text: "Active" },
-  { value: "2", text: "Completed" },
-]; */
+// import { formatDate, capitalizeText, priorities, statuses } from "../infrastructure/common";
 
 const OffcanvasForm = ({ name, ...props }) => {
 
-  console.log(props.show + " modal")
+  // console.log(props.show + " modal")
 
   const [show, setShow] = useState(!props.show);
   
@@ -37,15 +23,15 @@ const OffcanvasForm = ({ name, ...props }) => {
     props.updateStateShowOffcanvasForm(!props.show)
   }
 
-  const getAllProjects = () => {
-    const response = fetch('https://localhost:7172/api/Project');
-    const data = response.json();
-    this.setState({ projects: data, loading: false });   
-  }
+  // const getAllProjects = () => {
+  //   const response = fetch('https://localhost:7172/api/Project');
+  //   const data = response.json();
+  //   this.setState({ projects: data, loading: false });   
+  // }
 
-  const componentDidMount = () => {
-    this.getAllProjects();
-  }
+  // const componentDidMount = () => {
+  //   this.getAllProjects();
+  // }
 
   return (
     <>

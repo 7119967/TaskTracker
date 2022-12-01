@@ -19,15 +19,42 @@ export const formatDate = (date) => {
   };
 
   export const priorities = [
-    { value: "Default", text: "Choose ..." },
+    { value: "", text: "Choose ..." },
     { value: "1", text: "High" },
     { value: "2", text: "Middle" },
     { value: "3", text: "Low" },
   ];
   
-  export const statuses = [
-    { value: "Default", text: "Choose ..." },
+  export const projectStatuses = [
+    { value: "", text: "Choose ..." },
     { value: "0", text: "Not Started" },
     { value: "1", text: "Active" },
     { value: "2", text: "Completed" },
   ];
+
+  export const taskStatuses = [
+    { value: "", text: "Choose ..." },
+    { value: "0", text: "To Do" },
+    { value: "1", text: "In Progress" },
+    { value: "2", text: "Done" },
+  ];
+
+  export const initTask = {
+    create: formatDate(Date.now()),
+    modify: formatDate(Date.now()),
+    name: "",
+    priority: "",
+    taskStatus: "",
+    description: ""
+  };   
+
+  export const initProject = {
+    name: "",
+    create: formatDate(Date.now()),
+    modify: formatDate(Date.now()),
+    startDate: formatDate(Date.now()),
+    completionDate: "",
+    priority: "",
+    projectStatus: "",
+    tasks: []
+  }

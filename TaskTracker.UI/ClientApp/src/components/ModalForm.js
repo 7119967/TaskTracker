@@ -5,25 +5,17 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Modal from 'react-bootstrap/Modal';
 import { useState, useEffect } from 'react'
-import { formatDate, capitalizeText } from "../infrastructure/common";
-
-const priorities = [
-  { value: "Default", text: "Choose ..." },
-  { value: "1", text: "High" },
-  { value: "2", text: "Middle" },
-  { value: "3", text: "Low" },
-];
-
-const statuses = [
-  { value: "Default", text: "Choose ..." },
-  { value: "0", text: "Not Started" },
-  { value: "1", text: "Active" },
-  { value: "2", text: "Completed" },
-];
+import { 
+  // formatDate, 
+  // capitalizeText, 
+  priorities, 
+  projectStatuses, 
+  // taskStatuses 
+} from "../infrastructure/common";
 
 const ModalForm = (props) => {
 
-  console.log(props.show + " modal")
+  // console.log(props.show + " modal")
 
   const [show, setShow] = useState(!props.show);
   
@@ -115,7 +107,7 @@ const ModalForm = (props) => {
             // onChange={(e) => this.setState({ status: e.target.value })}
           >
             {/* <option value="DEFAULT">Choose ...</option> */}
-            {statuses.map((item) => {
+            {projectStatuses.map((item) => {
               return (
                 <option key={item.value} value={item.value}>
                   {item.text}
