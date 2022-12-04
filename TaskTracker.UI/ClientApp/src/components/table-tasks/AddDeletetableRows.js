@@ -14,7 +14,7 @@ const AddDeleteTableRows = ({ tasksData, setTasksData }) => {
             modify: formatDate(Date.now()),
             name: "",
             priority: "Default",
-            taskStatus: "Default",
+            status: "Default",
             description: ""
           };   
 

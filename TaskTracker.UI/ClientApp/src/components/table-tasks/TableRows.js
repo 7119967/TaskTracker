@@ -1,6 +1,5 @@
 import Form from "react-bootstrap/Form";
 import {
-  initTask,
   priorities,
   taskStatuses,
 } from "../../infrastructure/common";
@@ -15,7 +14,7 @@ const TableRows = ({ tasksData, deleteTableRows, handleChange }) => {
       modify,
       name,
       priority,
-      taskStatus,
+      status,
       description,
     } = data;
 
@@ -88,20 +87,13 @@ const TableRows = ({ tasksData, deleteTableRows, handleChange }) => {
           <td>
             <Form.Select
               required
-              id="form-taskStatus"
+              id="form-status"
               onChange={(e) => handleChange(index, e)}
-              name="taskStatus"
+              name="status"
             >
               {taskStatuses.map((item) => {
-                if (
-                  taskStatus.toLowerCase() ===
-                  item.text.toLowerCase().replace(" ", "")
-                ) {
-                  console.log(
-                    taskStatus.toLowerCase() +
-                      " equals to " +
-                      item.text.toLowerCase().replace(" ", "")
-                  );
+                if (status.toLowerCase() === item.text.toLowerCase().replace(" ", "")) {
+                  console.log(status.toLowerCase() + " equals to " + item.text.toLowerCase().replace(" ", ""));
                   return (
                     <option key={item.value} value={item.value} selected>
                       {item.text}

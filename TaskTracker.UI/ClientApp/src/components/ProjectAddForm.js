@@ -6,16 +6,17 @@ import Form from "react-bootstrap/Form";
 import Modal from 'react-bootstrap/Modal';
 import { useState, useEffect } from 'react'
 import { 
-  priorities,
-  projectStatuses,
-  initProject,
+  priorities, 
+  projectStatuses, 
+  initProject, 
+  makeLowerCaseRemoveSpace, 
 } from "../infrastructure/common";
 import AddDeleteTableRows from './table-tasks/AddDeletetableRows';
 import { isNotEmpty } from "../infrastructure/helpers/validator";
 
-const AddNewProjectForm = (props) => {
+const ProjectAddForm = ({updateStateShowAddForm, ...props}) => {
   const [show, setShow] = useState(!props.show);
-  const [newProject, setNewProject] = useState(initProject)
+  const [projectAdd, setProjectAdd] = useState(initProject)
   const [tasksData, setTasksData] = useState([]);
   const [validated, setValidated] = useState(false);
  
@@ -26,7 +27,7 @@ const AddNewProjectForm = (props) => {
 
   const handleClose = () => {
     setShow(!props.show); 
-    props.updateStateShowModal(!props.show)
+    updateStateShowAddForm(!props.show)
   }
 
   const postProject = async () => {
@@ -38,22 +39,30 @@ const AddNewProjectForm = (props) => {
       method: "POST",
       body: JSON.stringify(request),
     })
-    .then(response => response.json())
+    .then(async (response) => {
+      console.log("Post new project successful ", response.json)
 
-    console.log("Post new project successful")
+      if (!response.ok) {
+        const error = response.status;
+        return Promise.reject(error);
+      } 
+    })  
+     .catch((error) => {
+      console.error("There was an error!", error);
+    });
   }
 
   const mapData = () => {
     return {
-      ...newProject,
+      ...projectAdd,
       tasks: tasksData
     }
   }
 
   const handleChange = (e) => {
 
-    setNewProject({
-      ...newProject,
+    setProjectAdd({
+      ...projectAdd,
       [e.target.name]: e.target.value
     })
   }
@@ -66,8 +75,8 @@ const AddNewProjectForm = (props) => {
       e.preDefault();
       e.stopPropagation();
     }
-
     setValidated(true);
+    console.error("Form validated ", validated);
     
     if(validated === true){
       postProject()
@@ -85,12 +94,12 @@ const AddNewProjectForm = (props) => {
           <Modal.Title>New Project</Modal.Title>
         </Modal.Header>
         <Modal.Body>    
-          <Form noValidate validated={validated}>
+          <Form validated={validated}>
             <Form.Control
                 type="text"
                 className="d-none"
                 onChange={handleChange}
-                value={newProject.create}
+                value={projectAdd.create}
                 name="create"
               />
 
@@ -98,25 +107,25 @@ const AddNewProjectForm = (props) => {
                 type="text"
                 className="d-none"
                 onChange={handleChange}
-                value={newProject.modify}
+                value={projectAdd.modify}
                 name="modify"
               />
 
             <Row className="mb-3">
-              <Form.Group as={Col} className="" controlId="form-name">
+              <Form.Group as={Col} controlId="form-name">
                   <Form.Label>Name</Form.Label>
                   <Form.Control 
                     required
                     type="text" 
                     placeholder="Enter a name of project"                   
                     onChange={handleChange}
-                    value={newProject.name}
+                    value={projectAdd.name}
                     name="name"
                     onBlur={(e) => isNotEmpty(e.target.value)}
                     />
                     <Form.Control.Feedback type="invalid">Please input a name.</Form.Control.Feedback>
               </Form.Group>
-              <Form.Group as={Col} className="" controlId="form-priority">
+              <Form.Group as={Col} controlId="form-priority">
                 <Form.Label>Priority</Form.Label>
                 <Form.Select
                     required
@@ -124,50 +133,54 @@ const AddNewProjectForm = (props) => {
                     onChange={handleChange}
                     name="priority"
                   >
-                    {priorities.map((item) => {
-                      if (newProject.priority.toLowerCase() === item.text.toLowerCase()) {
-                        console.log(newProject.priority.toLowerCase() + " equals to " + item.text.toLowerCase());
-                        return (
-                          <option key={item.value} value={item.value} selected>
-                            {item.text}
-                          </option>
-                        );
-                      }
-                      return (
-                        <option key={item.value} value={item.value}>
-                          {item.text}
-                        </option>
-                      );
-                    })}
+                {priorities.map((item) => {
+                  if (
+                    makeLowerCaseRemoveSpace(projectAdd.priority) ===
+                    makeLowerCaseRemoveSpace(item.text)
+                  ) {
+                    return (
+                      <option key={item.value} value={item.value} selected>
+                        {item.text}
+                      </option>
+                    );
+                  }
+                  return (
+                    <option key={item.value} value={item.value}>
+                      {item.text}
+                    </option>
+                  );
+                })}
                   </Form.Select>
                   <Form.Control.Feedback type="invalid">Choose one item of the list.</Form.Control.Feedback>
                 </Form.Group>
             </Row>
 
             <Row className="mb-3">
-              <Form.Group as={Col} className="mb-3" controlId="form-startDate">
+              <Form.Group as={Col} controlId="form-startDate">
                 <Form.Label>Start</Form.Label>
                 <Form.Control
                   required
                   type="date"
                   onChange={handleChange}
-                  value={newProject.startDate}
+                  value={projectAdd.startDate}
                   name="startDate"
                 />
                 <Form.Control.Feedback type="invalid">Specify a date.</Form.Control.Feedback>
               </Form.Group>
 
-              <Form.Group as={Col} className="mb-3" controlId="form-projectStatus">
+              <Form.Group as={Col} controlId="form-status">
                 <Form.Label>Status</Form.Label>
                 <Form.Select
                   required
-                  id="form-projectStatus"
+                  id="form-status"
                   onChange={handleChange}
-                  name="projectStatus"
+                  name="status"
                 >
                   {projectStatuses.map((item) => {
-                    if (newProject.projectStatus.toLowerCase() === item.text.toLowerCase().replace(" ", "")) {
-                      console.log(newProject.projectStatus.toLowerCase() + " equals to " + item.text.toLowerCase().replace(" ", ""));
+                    if (
+                      makeLowerCaseRemoveSpace(projectAdd.status) ===
+                      makeLowerCaseRemoveSpace(item.text)
+                    ) {
                       return (
                         <option key={item.value} value={item.value} selected>
                           {item.text}
@@ -180,18 +193,17 @@ const AddNewProjectForm = (props) => {
                       </option>
                     );
                   })}
-
                 </Form.Select>
                 <Form.Control.Feedback type="invalid">Choose one item of the list.</Form.Control.Feedback>
               </Form.Group>
 
-              <Form.Group as={Col} className="mb-3" controlId="form-completionDate">
+              <Form.Group as={Col} controlId="form-completionDate">
                 <Form.Label>Completion</Form.Label>
                 <Form.Control
                   required
                   type="date"
                   onChange={handleChange}
-                  value={newProject.completionDate}
+                  value={projectAdd.completionDate}
                   name="completionDate"
                 />
                 <Form.Control.Feedback type="invalid">Specify a date.</Form.Control.Feedback>
@@ -220,4 +232,4 @@ const AddNewProjectForm = (props) => {
   )   
 };
 
-export default AddNewProjectForm;
+export default ProjectAddForm;

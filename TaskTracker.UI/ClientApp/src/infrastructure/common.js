@@ -1,3 +1,14 @@
+
+export const readOnly = (str) => {
+  let value = str === undefined ? "" : str;
+  return value;
+};
+
+export const makeLowerCaseRemoveSpace = (str) => {
+  let value = typeof str === 'string' ? str.toLowerCase() : '';
+  return value.toLowerCase().replace(" ", "");
+};
+
 export const formatDate = (date) => {
     let d = new Date(date);
     let month = (d.getMonth() + 1).toString();
@@ -9,8 +20,7 @@ export const formatDate = (date) => {
     if (day.length < 2) {
       day = '0' + day;
     }
-
-    // console.log(new Date(date).toLocaleDateString())
+    
     return [year, month, day].join('-');
   }
 
@@ -44,7 +54,7 @@ export const formatDate = (date) => {
     modify: formatDate(Date.now()),
     name: "",
     priority: "",
-    taskStatus: "",
+    status: "",
     description: ""
   };   
 
@@ -55,6 +65,44 @@ export const formatDate = (date) => {
     startDate: formatDate(Date.now()),
     completionDate: "",
     priority: "",
-    projectStatus: "",
+    status: "",
     tasks: []
+  }
+
+  export const getDefaultPriority = (str) => {
+    let value = typeof str === 'string' ? str.toLowerCase() : "";
+    
+    for (const item of priorities) {
+      if (makeLowerCaseRemoveSpace(value) === makeLowerCaseRemoveSpace(item.text)) {
+        return value = item.text
+      }
+    }
+
+    if (makeLowerCaseRemoveSpace(value) === "") {
+      return value = "Choose ..."
+    }
+  }
+
+  export const getDefaultProjectStatus = (str) => {
+    let value = typeof str === 'string' ? str.toLowerCase() : "";
+    
+    projectStatuses.filter((item) => {
+      if (makeLowerCaseRemoveSpace(value) === makeLowerCaseRemoveSpace(item.text)) {
+        return value.toLowerCase().replace(" ", "")
+      }
+      return value.toLowerCase().replace(" ", "")
+    })
+    
+  }
+
+  export const getDefaultTaskStatus = (str) => {
+    let value = typeof str === 'string' ? str.toLowerCase() : "";
+    
+    taskStatuses.filter((item) => {
+      if (makeLowerCaseRemoveSpace(value) === makeLowerCaseRemoveSpace(item.text)) {
+        return value.toLowerCase().replace(" ", "")
+      }
+      return value.toLowerCase().replace(" ", "")
+    })
+    
   }
