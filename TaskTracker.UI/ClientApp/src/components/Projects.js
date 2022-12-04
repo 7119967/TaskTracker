@@ -129,21 +129,20 @@ export class Projects extends Component {
 
   renderTableProjects = (projects) => {
     return (
-      <div>
         <table
           className="table table-striped table-hover"
           aria-labelledby="tabelLabel"
         >
           <thead>
             <tr>
-              <th scope="col">#</th>
-              <th scope="col">Id</th>
-              <th scope="col">Name</th>
-              <th scope="col">Priority</th>
-              <th scope="col">Start</th>
-              <th scope="col">Completion</th>
-              <th scope="col">Status</th>
-              <th scope="col">Actions</th>
+              <th>#</th>
+              <th>Id</th>
+              <th>Name</th>
+              <th>Priority</th>
+              <th>Start</th>
+              <th>Completion</th>
+              <th>Status</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -179,7 +178,6 @@ export class Projects extends Component {
             ))}
           </tbody>
         </table>
-      </div>
     );
   };
 

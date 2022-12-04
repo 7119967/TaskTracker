@@ -1,51 +1,56 @@
 import React from "react";
 import Form from "react-bootstrap/Form";
-import Offcanvas from 'react-bootstrap/Offcanvas';
-import { useState, useEffect } from 'react'
-import { 
-  formatDate, 
-  capitalizeText, 
-  priorities, 
-  projectStatuses, 
-  makeLowerCaseRemoveSpace, 
+import Offcanvas from "react-bootstrap/Offcanvas";
+import { useState, useEffect } from "react";
+import {
+  formatDate,
+  capitalizeText,
+  priorities,
+  projectStatuses,
+  makeLowerCaseRemoveSpace,
 } from "../infrastructure/common";
 
-const ProjectEditForm = ({ row, project, getAllProjects, updateStateShowEditForm, ...props }) => {
-
+const ProjectEditForm = ({
+  row,
+  project,
+  getAllProjects,
+  updateStateShowEditForm,
+  ...props
+}) => {
   const [showEditForm, setShowEditForm] = useState(!props.show);
-  const [projectEdit, setProjectEdit] = useState({})
+  const [projectEdit, setProjectEdit] = useState({});
   const [validated, setValidated] = useState(false);
 
   useEffect(() => {
-    setProjectEdit(project)
+    setProjectEdit(project);
   }, [project]);
-  
+
   useEffect(() => {
     setShowEditForm(props.show);
   }, [props.show]);
 
   const handleClose = () => {
-    setShowEditForm(!props.show); 
-    updateStateShowEditForm(!props.show)
-  }
+    setShowEditForm(!props.show);
+    updateStateShowEditForm(!props.show);
+  };
 
   const handleChange = (e) => {
     setProjectEdit({
       ...projectEdit,
-      [e.target.name]: e.target.value
-    })
-  }
- 
+      [e.target.name]: e.target.value,
+    });
+  };
+
   const validationForm = (e) => {
     const form = e.currentTarget;
 
-    form.checkValidity()
+    form.checkValidity();
 
-    if(form.reportValidity()){
+    if (form.reportValidity()) {
       e.stopPropagation();
     }
     setValidated(true);
-  }
+  };
 
   const putProject = async (editProject) => {
     const url = "https://localhost:7172/api/Project/?id=";
@@ -57,7 +62,7 @@ const ProjectEditForm = ({ row, project, getAllProjects, updateStateShowEditForm
       body: JSON.stringify(editProject),
     })
       .then(async (response) => {
-        getAllProjects()
+        getAllProjects();
 
         if (!response.ok) {
           const error = response.status;
@@ -71,7 +76,6 @@ const ProjectEditForm = ({ row, project, getAllProjects, updateStateShowEditForm
   };
 
   const onSave = (e) => {
-   
     const editProject = {
       id: projectEdit.id,
       name: capitalizeText(projectEdit.name),
@@ -82,12 +86,12 @@ const ProjectEditForm = ({ row, project, getAllProjects, updateStateShowEditForm
       startDate: formatDate(projectEdit.startDate),
       completionDate: formatDate(projectEdit.completionDate),
     };
-   
-    validationForm(e)
-    
+
+    validationForm(e);
+
     console.log("validated ", validated);
-    
-    if(validated === true){
+
+    if (validated === true) {
       try {
         putProject(editProject);
       } catch (event) {
@@ -124,7 +128,6 @@ const ProjectEditForm = ({ row, project, getAllProjects, updateStateShowEditForm
               <Form.Label>Id</Form.Label>
               <Form.Control
                 type="text"
-                placeholder=""
                 disabled
                 onChange={handleChange}
                 value={projectEdit.id}

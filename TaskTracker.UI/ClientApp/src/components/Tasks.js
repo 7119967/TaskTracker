@@ -19,6 +19,7 @@ export class Tasks extends Component {
             priority: "",
             status: "",
             description: "",
+            task:{}
         }
     }
 
@@ -38,35 +39,31 @@ export class Tasks extends Component {
         this.getAllTasks();
       };
 
+    getTaskById = async (id) => {
+        const url = "https://localhost:7172/api/Task/";
+        await fetch(url.concat(id), {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: "GET"
+        })
+            .then(response => response.json())
+            .then(data => { 
+                console.log('data ', data.data)
+                this.setState({ task: data.data });
+            })
+    };
+
     onEdit(task_id, index){
         this.setState({
           show: !this.state.show
         });
 
         this.setState({row: index})
-
-        let editTask = this.state.tasks.find((x) => x.id === task_id);
-
-/*         forEach(var item in editTask) {
-            console.log(item);
-        }; */
-
-        console.log('editTask', JSON.stringify(editTask))
-
-        this.setState(() => ({
-            id: editTask.id,
-            name: editTask.name,
-            create: formatDate(editTask.create),
-            modify: formatDate(Date.now()),
-            priority: editTask.priority,
-            status: editTask.status,
-            description: editTask.description,
-        }));
-    
-        console.log(!this.state.show + ' task_id ' + task_id)
+        this.getTaskById(task_id)
     }
 
-    deleteProject = async (id) => {
+    deleteTask = async (id) => {
         const url = "https://localhost:7172/api/Task/";
         fetch(url.concat(id), { method: "DELETE" })
           .then(async (response) => {
@@ -86,10 +83,10 @@ export class Tasks extends Component {
         if (this.state.tasks.length === 0) {
         //   this.setDefaultValues();
         }
-      };
+    };
     
     onDelete = (task_id) => {
-        this.deleteProject(task_id);
+        this.deleteTask(task_id);
     };
 
     componentDidMount() {
@@ -98,20 +95,19 @@ export class Tasks extends Component {
 
     renderTableProjects = (tasks) => {
         return (
-            <div>
             <table
             className="table table-striped table-hover"
             aria-labelledby="tabelLabel"
             >
             <thead>
                 <tr>
-                <th scope="col">#</th>
-                <th scope="col">Id</th>
-                <th scope="col">Name</th>
-                <th scope="col">Priority</th>
-                <th scope="col">Description</th>
-                <th scope="col">Status</th>
-                <th scope="col">Actions</th>
+                <th>#</th>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Priority</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -121,7 +117,7 @@ export class Tasks extends Component {
                     <td>{task.id.substring(0, 4)}</td>
                     <td>{capitalizeText(task.name)}</td>
                     <td>{capitalizeText(task.priority)}</td>
-                    <td className="text-truncate">{capitalizeText(task.description)}</td>
+                    <td>{capitalizeText(task.description)}</td>
                     <td>{capitalizeText(task.status)}</td>
                     <td>
                     <button 
@@ -138,7 +134,6 @@ export class Tasks extends Component {
                 ))}
             </tbody>
             </table>
-        </div>
         )
     }
     
@@ -150,6 +145,8 @@ export class Tasks extends Component {
                     placement = 'end' 
                     row = {this.state.row} 
                     show = {this.state.show} 
+                    task = {this.state.task} 
+                    getAllTasks = {this.state.getAllTasks}
                     updateStateShowTaskEditForm = {this.updateStateShowTaskEditForm}
                 />
                 <h3>Tasks</h3>
