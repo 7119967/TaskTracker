@@ -1,8 +1,6 @@
 import React from "react";
-import { 
-    formatDate } from "../../infrastructure/common";
+import { formatDate } from "../../infrastructure/common";
 import TableRows from "./TableRows";
-
 
 const AddDeleteTableRows = ({ tasksData, setTasksData }) => {
  

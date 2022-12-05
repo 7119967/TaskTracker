@@ -1,8 +1,12 @@
 import React, { Component } from "react";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { formatDate, capitalizeText } from "../infrastructure/common";
+import { Link } from "react-router-dom";
+import {
+  formatDate,
+  capitalizeText,
+  makeLowerCaseRemoveSpace,
+} from "../infrastructure/common";
 import ProjectAddForm from "./ProjectAddForm";
 import ProjectViewForm from "./ProjectViewForm";
 
@@ -14,7 +18,7 @@ export class Home extends Component {
 
     this.state = {
       projects: [],
-      row:"",
+      row: "",
       id: "",
       name: "",
       create: formatDate(Date.now()),
@@ -28,23 +32,7 @@ export class Home extends Component {
       showAddForm: false,
       showViewForm: false,
     };
-
     // this.setDefaultValues = this.setDefaultValues.bind(this);
-  }
-
-  setDefaultValues() {
-    this.setState({
-      name: "",
-      create: formatDate(Date.now()),
-      modify: formatDate(Date.now()),
-      startDate: formatDate(Date.now()),
-      completionDate: "",
-      priority: "Default",
-      status: "Default",
-      isEdit: false,
-    });
-
-    console.log("State set default values");
   }
 
   async getAllProjects() {
@@ -58,16 +46,16 @@ export class Home extends Component {
   }
 
   updateStateShowAddForm = (value) => {
-    this.setState({ 
-      showAddForm: value 
+    this.setState({
+      showAddForm: value,
     });
-  }
+  };
 
   updateStateShowViewForm = (value) => {
-    this.setState({ 
-      showViewForm: value 
+    this.setState({
+      showViewForm: value,
     });
-  }
+  };
 
   setStateProject = (project_id, index) => {
     this.setState({ row: index });
@@ -84,7 +72,7 @@ export class Home extends Component {
         completionDate: formatDate(setProject.completionDate),
         priority: setProject.priority,
         status: setProject.status,
-        tasks: setProject.tasks
+        tasks: setProject.tasks,
       },
     });
   };
@@ -101,11 +89,11 @@ export class Home extends Component {
     this.setState({
       showAddForm: !this.state.showAddForm,
     });
-  }
+  };
 
   renderTableProjects = (projects) => {
     return (
-      <ol className="list-group list-group-numbered">
+      <ol className="list-group list-group-numbered shadow p-3 mb-5 bg-white rounded">
         {projects.map((project, index) => (
           <li
             key={project.id}
@@ -146,38 +134,134 @@ export class Home extends Component {
       this.renderTableProjects(this.state.projects)
     );
 
+    let countNewProjects = 0;
+
+    this.state.projects.forEach((project) => {
+      if (formatDate(project.startDate) === formatDate(Date.now()))
+        countNewProjects++;
+    });
+
+    let countNotStarted = 0;
+    let countActive = 0;
+    let countCompleted = 0;
+    let sumProjects = this.state.projects.length;
+
+    this.state.projects.forEach((project) => {
+      if (
+        makeLowerCaseRemoveSpace(project.status) ===
+        makeLowerCaseRemoveSpace("NotStarted")
+      )
+        countNotStarted++;
+
+      if (
+        makeLowerCaseRemoveSpace(project.status) ===
+        makeLowerCaseRemoveSpace("Active")
+      )
+        countActive++;
+
+      if (
+        makeLowerCaseRemoveSpace(project.status) ===
+        makeLowerCaseRemoveSpace("Completed")
+      )
+        countCompleted++;
+    });
+
+    let valueNotStarted = (countNotStarted / sumProjects) * 100;
+    let valueActive = (countActive / sumProjects) * 100;
+    let valueCompleted = (countCompleted / sumProjects) * 100;
+
     return (
       <>
         <ProjectViewForm
-          row = {this.state.row} 
-          show = {this.state.showViewForm}
-          project = {this.state.project}
-          updateStateShowViewForm = {this.updateStateShowViewForm}
+          row={this.state.row}
+          show={this.state.showViewForm}
+          project={this.state.project}
+          updateStateShowViewForm={this.updateStateShowViewForm}
         />
 
         <ProjectAddForm
-          show = {this.state.showAddForm}
-          updateStateShowAddForm = {this.updateStateShowAddForm}
+          show={this.state.showAddForm}
+          updateStateShowAddForm={this.updateStateShowAddForm}
         />
         <Row>
           <Col>
-            <div className="card">
-              <h5 className="card-header">Info</h5>
-              <div className="card-body">
-                <h5 className="card-title">Description</h5>
-                <p className="card-text">
-                  The program is a Web API for entering project data and also
-                  keeps tasks entities into the database (task tracker).
-                </p>
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  onClick={() => this.onAdd()}
-                >
-                  New Project
-                </button>
+            <Row>
+              <div className="card shadow p-3 mb-1 bg-white rounded">
+                <h5 className="card-header">Info</h5>
+                <div className="card-body">
+                  <p className="card-text">
+                    The program is a Web API for entering project data and also
+                    keeps tasks entities into the database (task tracker).
+                  </p>
+                  <button
+                    type="button"
+                    className="btn btn-primary position-relative"
+                    onClick={() => this.onAdd()}
+                  >
+                    New Project
+                    <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                      {countNewProjects}
+                      <span className="visually-hidden">New projects</span>
+                    </span>
+                  </button>
+                </div>
               </div>
-            </div>
+            </Row>
+            <Row>
+              <div
+                className="card shadow p-3 mb-5 bg-white rounded"
+                style={{ width: 100 + "%" }}
+              >
+                <h5 className="card-header">Project analytics</h5>
+                <div className="card-body">
+                  <div className="alert alert-primary" role="alert">
+                    NotStarted: {valueNotStarted}%
+                  </div>
+                  <div className="alert alert-warning" role="alert">
+                    Active: {valueActive}%
+                  </div>
+                  <div className="alert alert-success" role="alert">
+                    Completed: {valueCompleted}%
+                  </div>
+                  <div className="progress">
+                    <div
+                      className="progress-bar bg-primary"
+                      role="progressbar"
+                      style={{ width: valueNotStarted + "%" }}
+                      aria-valuenow={valueNotStarted}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                    >
+                      NotStarted: {valueNotStarted}"%"
+                    </div>
+                  </div>
+                  <div className="progress">
+                    <div
+                      className="progress-bar bg-warning"
+                      role="progressbar"
+                      style={{ width: valueActive + "%" }}
+                      aria-valuenow={valueActive}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                    >
+                      Active: {valueActive}"%"
+                    </div>
+                  </div>
+                  <div class="progress">
+                    <div
+                      class="progress-bar bg-success"
+                      role="progressbar"
+                      style={{ width: valueCompleted + "%" }}
+                      aria-valuenow={valueCompleted}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                    >
+                      Completed: {valueCompleted}"%"
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Row>
           </Col>
           <Col>
             {this.state.projects.length === 0 ? (

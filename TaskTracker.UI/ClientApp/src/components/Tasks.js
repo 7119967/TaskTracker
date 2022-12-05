@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Row from 'react-bootstrap/Row';
-import { formatDate, capitalizeText, } from "../infrastructure/common";
+import { capitalizeText, } from "../infrastructure/common";
 import TaskEditForm from "./TaskEditForm";
 
 export class Tasks extends Component {
@@ -47,11 +47,11 @@ export class Tasks extends Component {
           },
           method: "GET"
         })
-            .then(response => response.json())
-            .then(data => { 
-                console.log('data ', data.data)
-                this.setState({ task: data.data });
-            })
+        .then(response => response.json())
+        .then(data => { 
+            console.log('data ', data.data)
+            this.setState({ task: data.data });
+        })
     };
 
     onEdit(task_id, index){

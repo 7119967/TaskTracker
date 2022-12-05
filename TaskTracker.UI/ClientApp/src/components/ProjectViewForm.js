@@ -11,13 +11,11 @@ import {
   projectStatuses, 
   makeLowerCaseRemoveSpace, 
 } from "../infrastructure/common";
-import AddDeleteTableRows from './table-tasks/AddDeletetableRows';
 
 const ProjectViewForm = ({ row, project, getAllProjects, updateStateShowViewForm, ...props }) => {
 
   const [showViewForm, setShowViewForm] = useState(!props.show);
   const [projectView, setProjectView] = useState({})
-  const [tasksData, setTasksData] = useState([]);
 
   useEffect(() => {
     if(project !== undefined){

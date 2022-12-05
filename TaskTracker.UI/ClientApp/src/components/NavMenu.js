@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Collapse, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import './NavMenu.css';
+import { formatDate } from "../infrastructure/common";
 import ProjectAddForm from "./ProjectAddForm";
 
 export class NavMenu extends Component {
@@ -12,6 +13,8 @@ export class NavMenu extends Component {
 
     this.toggleNavbar = this.toggleNavbar.bind(this);
     this.state = {
+      projects: [],
+      loading: true,
       collapsed: true,
       show: false,
     };
@@ -29,13 +32,30 @@ export class NavMenu extends Component {
     });
   }
 
-  showModal(){
+  onAdd(){
     this.setState({
       show: !this.state.show
     });
   }
 
+  async getAllProjects() {
+    const response = await fetch("https://localhost:7172/api/Project");
+    const data = await response.json();
+    this.setState({ projects: data, loading: false });
+  }
+
+  componentDidMount() {
+    this.getAllProjects();
+  }
+
   render() {
+    let countNewProjects = 0
+    
+    this.state.projects.forEach(project => {
+      if(formatDate(project.startDate) === formatDate(Date.now()))
+      countNewProjects++
+    });
+
     return (
       <header>
         <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" container bg="dark" variant="dark">
@@ -53,7 +73,17 @@ export class NavMenu extends Component {
                 <NavLink tag={Link} className="text-dark" to="/tasks">Tasks</NavLink>
               </NavItem>
               <NavItem>
-                <button type="button" className="btn btn-primary" onClick={() => this.showModal()}>New Project</button>
+              <button
+                  type="button"
+                  className="btn btn-primary position-relative"
+                  onClick={() => this.onAdd()}
+                >
+                  New Project
+                  <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    {countNewProjects}
+                    <span className="visually-hidden">New projects</span>
+                  </span>
+                </button>
               </NavItem>
             </ul>
           </Collapse>
