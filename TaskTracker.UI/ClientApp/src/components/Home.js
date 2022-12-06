@@ -93,7 +93,7 @@ export class Home extends Component {
 
   renderTableProjects = (projects) => {
     return (
-      <ol className="list-group list-group-numbered shadow p-3 mb-5 bg-white rounded">
+      <ol className="list-group list-group-numbered">
         {projects.map((project, index) => (
           <li
             key={project.id}
@@ -166,9 +166,9 @@ export class Home extends Component {
         countCompleted++;
     });
 
-    let valueNotStarted = (countNotStarted / sumProjects) * 100;
-    let valueActive = (countActive / sumProjects) * 100;
-    let valueCompleted = (countCompleted / sumProjects) * 100;
+    let valueNotStarted = Math.round((countNotStarted / sumProjects) * 100);
+    let valueActive = Math.round((countActive / sumProjects) * 100);
+    let valueCompleted = Math.round((countCompleted / sumProjects) * 100);
 
     return (
       <>
@@ -181,6 +181,7 @@ export class Home extends Component {
 
         <ProjectAddForm
           show={this.state.showAddForm}
+          getAllProjects={this.getAllProjects}
           updateStateShowAddForm={this.updateStateShowAddForm}
         />
         <Row>
@@ -193,17 +194,27 @@ export class Home extends Component {
                     The program is a Web API for entering project data and also
                     keeps tasks entities into the database (task tracker).
                   </p>
-                  <button
-                    type="button"
-                    className="btn btn-primary position-relative"
-                    onClick={() => this.onAdd()}
-                  >
-                    New Project
-                    <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                      {countNewProjects}
-                      <span className="visually-hidden">New projects</span>
-                    </span>
-                  </button>
+                  {countNewProjects === 0 ? (
+                    <button
+                      type="button"
+                      className="btn btn-primary position-relative"
+                      onClick={() => this.onAdd()}
+                    >
+                      New Project
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      className="btn btn-primary position-relative"
+                      onClick={() => this.onAdd()}
+                    >
+                      New Project
+                      <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        {countNewProjects}
+                        <span className="visually-hidden">New projects</span>
+                      </span>
+                    </button>
+                  )}
                 </div>
               </div>
             </Row>
@@ -225,38 +236,38 @@ export class Home extends Component {
                   </div>
                   <div className="progress">
                     <div
-                      className="progress-bar bg-primary"
+                      className="progress-bar progress-bar-striped progress-bar-animated bg-primary"
                       role="progressbar"
                       style={{ width: valueNotStarted + "%" }}
                       aria-valuenow={valueNotStarted}
                       aria-valuemin={0}
                       aria-valuemax={100}
                     >
-                      NotStarted: {valueNotStarted}"%"
+                      NotStarted: {valueNotStarted}%
                     </div>
                   </div>
                   <div className="progress">
                     <div
-                      className="progress-bar bg-warning"
+                      className="progress-bar progress-bar-striped progress-bar-animated bg-warning"
                       role="progressbar"
                       style={{ width: valueActive + "%" }}
                       aria-valuenow={valueActive}
                       aria-valuemin={0}
                       aria-valuemax={100}
                     >
-                      Active: {valueActive}"%"
+                      Active: {valueActive}%
                     </div>
                   </div>
-                  <div class="progress">
+                  <div className="progress">
                     <div
-                      class="progress-bar bg-success"
+                      className="progress-bar progress-bar-striped progress-bar-animated bg-success"
                       role="progressbar"
                       style={{ width: valueCompleted + "%" }}
                       aria-valuenow={valueCompleted}
                       aria-valuemin={0}
                       aria-valuemax={100}
                     >
-                      Completed: {valueCompleted}"%"
+                      Completed: {valueCompleted}%
                     </div>
                   </div>
                 </div>
@@ -269,7 +280,9 @@ export class Home extends Component {
                 There are no projects!
               </div>
             ) : (
-              contents
+              <div className="card shadow p-3 mb-5 bg-white rounded">
+                <div className="card-body">{contents}</div>
+              </div>
             )}
           </Col>
         </Row>

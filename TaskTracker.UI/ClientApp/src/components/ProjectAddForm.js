@@ -14,7 +14,7 @@ import {
 import AddDeleteTableRows from './table-tasks/AddDeletetableRows';
 import { isNotEmpty } from "../infrastructure/helpers/validator";
 
-const ProjectAddForm = ({updateStateShowAddForm, ...props}) => {
+const ProjectAddForm = ({getAllProjects, updateStateShowAddForm, ...props}) => {
   const [show, setShow] = useState(!props.show);
   const [projectAdd, setProjectAdd] = useState(initProject)
   const [tasksData, setTasksData] = useState([]);
@@ -41,7 +41,8 @@ const ProjectAddForm = ({updateStateShowAddForm, ...props}) => {
     })
     .then(async (response) => {
       console.log("Post new project successful ", response.json)
-
+      getAllProjects()
+      handleClose()
       if (!response.ok) {
         const error = response.status;
         return Promise.reject(error);

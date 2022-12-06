@@ -73,23 +73,34 @@ export class NavMenu extends Component {
                 <NavLink tag={Link} className="text-dark" to="/tasks">Tasks</NavLink>
               </NavItem>
               <NavItem>
-              <button
-                  type="button"
-                  className="btn btn-primary position-relative"
-                  onClick={() => this.onAdd()}
-                >
-                  New Project
-                  <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                    {countNewProjects}
-                    <span className="visually-hidden">New projects</span>
-                  </span>
-                </button>
+              {countNewProjects === 0 ?
+                      <button
+                      type="button"
+                      className="btn btn-primary position-relative"
+                      onClick={() => this.onAdd()}
+                    >
+                      New Project
+                    </button>
+                  :
+                    <button
+                      type="button"
+                      className="btn btn-primary position-relative"
+                      onClick={() => this.onAdd()}
+                    >
+                      New Project
+                      <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        {countNewProjects}
+                        <span className="visually-hidden">New projects</span>
+                      </span>
+                    </button>
+                  }
               </NavItem>
             </ul>
           </Collapse>
         </Navbar>
         <ProjectAddForm 
           show={this.state.show} 
+          getAllProjects={this.getAllProjects}
           updateStateShowModal={this.updateStateShowModal}
         />
       </header>
