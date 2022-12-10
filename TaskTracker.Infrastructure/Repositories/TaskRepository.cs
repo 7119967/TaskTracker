@@ -1,5 +1,4 @@
-﻿using TaskTracker.Core.Entities;
-using TaskTracker.Core.Interfaces;
+﻿using TaskTracker.Core.Interfaces;
 using TaskTracker.Infrastructure.Data;
 using MyTask = TaskTracker.Core.Entities.MyTask;
 

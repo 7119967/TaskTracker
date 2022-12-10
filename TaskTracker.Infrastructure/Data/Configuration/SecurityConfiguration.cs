@@ -16,14 +16,14 @@ namespace TaskTracker.Infrastructure.Data.Configuration
                 .HasMaxLength(10)
                 .IsUnicode(false);
 
-            entity.Property(e => e.Create).HasColumnType("datetime");
+            entity.Property(e => e.Created).HasColumnType("datetime");
 
             entity.Property(e => e.Email)
                 .IsRequired()
                 .HasMaxLength(100)
                 .IsUnicode(false);
 
-            entity.Property(e => e.Modify).HasColumnType("datetime");
+            entity.Property(e => e.Modified).HasColumnType("datetime");
 
             entity.Property(e => e.Name)
                 .IsRequired()

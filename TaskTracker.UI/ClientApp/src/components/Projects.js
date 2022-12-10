@@ -17,10 +17,10 @@ export class Projects extends Component {
       project: {
         id: "",
         name: "",
-        create: "",
-        modify: "",
+        created: "",
+        modified: "",
         startDate: "",
-        completionDate: "",
+        finishDate: "",
         priority: "",
         status: "",
       },
@@ -34,10 +34,10 @@ export class Projects extends Component {
   setDefaultValues() {
     this.setState({
       name: "",
-      create: formatDate(Date.now()),
-      modify: formatDate(Date.now()),
+      created: formatDate(Date.now()),
+      modified: formatDate(Date.now()),
       startDate: formatDate(Date.now()),
-      completionDate: "",
+      finishDate: "",
       priority: "Default",
       status: "Default",
       isEdit: false,
@@ -45,7 +45,7 @@ export class Projects extends Component {
   }
 
   deleteProject = async (id) => {
-    const url = "https://localhost:7172/api/Project/";
+    const url = "http://localhost:5172/api/Project/";
     fetch(url.concat(id), { method: "DELETE" })
       .then(async (response) => {
         this.getAllProjects();
@@ -67,7 +67,7 @@ export class Projects extends Component {
   };
 
   async getAllProjects() {
-    const response = await fetch("https://localhost:7172/api/Project");
+    const response = await fetch("http://localhost:5172/api/Project");
     const data = await response.json();
     this.setState({ projects: data, loading: false });
   }
@@ -85,10 +85,10 @@ export class Projects extends Component {
     this.setState({ project: {
       id: setProject.id,
       name: setProject.name,
-      create: formatDate(setProject.create),
-      modify: formatDate(Date.now()),
+      created: formatDate(setProject.created),
+      modified: formatDate(Date.now()),
       startDate: formatDate(setProject.startDate),
-      completionDate: formatDate(setProject.completionDate),
+      finishDate: formatDate(setProject.finishDate),
       priority: setProject.priority,
       status: setProject.status,
       tasks: setProject.tasks
@@ -161,7 +161,7 @@ export class Projects extends Component {
                 </td>
                 <td>{capitalizeText(project.priority)}</td>
                 <td>{project.startDate.substring(0, 10)}</td>
-                <td>{project.completionDate.substring(0, 10)}</td>
+                <td>{project.finishDate.substring(0, 10)}</td>
                 <td>{capitalizeText(project.status)}</td>
                 <td>
                 <button 

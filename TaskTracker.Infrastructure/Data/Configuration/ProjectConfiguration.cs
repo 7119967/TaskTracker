@@ -28,10 +28,10 @@ namespace TaskTracker.Infrastructure.Data.Configuration
             //    .OnDelete(DeleteBehavior.ClientSetNull)
             //    .HasConstraintName("FK_Departament_BuildID");
 
-            entity.Property(e => e.Create).HasColumnType("datetime");
-            entity.Property(e => e.Modify).HasColumnType("datetime");
+            entity.Property(e => e.Created).HasColumnType("datetime");
+            entity.Property(e => e.Modified).HasColumnType("datetime");
             entity.Property(e => e.StartDate).HasColumnType("datetime");
-            entity.Property(e => e.CompletionDate).HasColumnType("datetime");
+            entity.Property(e => e.FinishDate).HasColumnType("datetime");
         }
     }
 }

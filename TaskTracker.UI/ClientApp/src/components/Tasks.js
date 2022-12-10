@@ -14,8 +14,8 @@ export class Tasks extends Component {
             show: false,
             id: "",
             name: "",
-            create: "",
-            modify: "",
+            created: "",
+            modified: "",
             priority: "",
             status: "",
             description: "",
@@ -24,7 +24,7 @@ export class Tasks extends Component {
     }
 
     async getAllTasks() {
-        const response = await fetch('https://localhost:7172/api/Task');
+        const response = await fetch('http://localhost:5172/api/Task');
         const data = await response.json();
         this.setState({ tasks: data, loading: false });
     }
@@ -40,7 +40,7 @@ export class Tasks extends Component {
       };
 
     getTaskById = async (id) => {
-        const url = "https://localhost:7172/api/Task/";
+        const url = "http://localhost:5172/api/Task/";
         await fetch(url.concat(id), {
           headers: {
             "Content-Type": "application/json",
@@ -64,7 +64,7 @@ export class Tasks extends Component {
     }
 
     deleteTask = async (id) => {
-        const url = "https://localhost:7172/api/Task/";
+        const url = "http://localhost:5172/api/Task/";
         fetch(url.concat(id), { method: "DELETE" })
           .then(async (response) => {
             this.getAllTasks();

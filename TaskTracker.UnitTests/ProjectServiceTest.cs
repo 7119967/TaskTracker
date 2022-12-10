@@ -38,20 +38,20 @@ namespace TaskTracker.UnitTests
                 new  Project{
                 Name = "Project Name 1",
                 Status = Core.Enums.ProjectStatus.NotStarted,
-                Create = DateTime.Now,
+                Created = DateTime.Now,
                 },
                 new  Project{
                 Name = "Project Name 2",
                 Status = Core.Enums.ProjectStatus.Active,
-                Create = DateTime.Now 
+                Created = DateTime.Now
                 },
                 new  Project{
                 Name = "Project Name 3",
                 Status = Core.Enums.ProjectStatus.Completed,
-                Create = DateTime.Now
+                Created = DateTime.Now
                 }
             };
-        
+
             _unitOfWork.Setup<IEnumerable<Project>>(
                 rep => rep.ProjectRepository.GetAll()
             ).Returns((objectsList));
@@ -70,7 +70,7 @@ namespace TaskTracker.UnitTests
                 {
                     Name = "Project Name 1",
                     Status = Core.Enums.ProjectStatus.NotStarted,
-                    Create = DateTime.Now
+                    Created = DateTime.Now
                 };
 
                 _unitOfWork.Setup(

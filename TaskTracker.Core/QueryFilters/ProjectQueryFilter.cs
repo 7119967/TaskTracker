@@ -4,12 +4,12 @@ namespace TaskTracker.Core.QueryFilters
 {
     public class ProjectQueryFilter
     {
-        public DateTime? Create { get; set; }
-        public DateTime? Modify { get; set; }
+        public DateTime? Created { get; set; }
+        public DateTime? Modified { get; set; }
         public string Name { get; set; }
         public Priority Priority { get; set; }
         public DateTime StartDate { get; set; }
-        public DateTime CompletionDate { get; set; }
+        public DateTime FinishDate { get; set; }
         public ProjectStatus Status { get; set; }
     }
 }

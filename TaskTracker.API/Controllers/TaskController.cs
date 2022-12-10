@@ -2,7 +2,6 @@
 using TaskTracker.API.Responses;
 using TaskTracker.Core.Interfaces;
 using TaskTracker.Core.QueryFilters;
-using TaskTracker.Core.Services;
 using MyTask = TaskTracker.Core.Entities.MyTask;
 
 namespace TaskTracker.API.Controllers

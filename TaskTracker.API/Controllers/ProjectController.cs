@@ -41,7 +41,7 @@ namespace TaskTracker.API.Controllers
             {
                 var service = _projectService.Gets();
                 var response = new ApiResponse<IEnumerable<Project>>(service);
-               // return Ok(response);
+                // return Ok(response);
                 return Ok(service);
             }
             catch (System.Exception ex)

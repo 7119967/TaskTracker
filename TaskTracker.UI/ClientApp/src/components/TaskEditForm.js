@@ -43,7 +43,7 @@ const TaskEditForm = ({
   const putTask = async (editTask) => {
     console.log("editTask ", JSON.stringify(editTask));
 
-    const url = "https://localhost:7172/api/Task/?id=";
+    const url = "http://localhost:5172/api/Task/?id=";
     await fetch(url.concat(editTask.id), {
       headers: {
         "Content-Type": "application/json",
@@ -83,8 +83,8 @@ const TaskEditForm = ({
         const editTask = {
           id: taskEdit.id,
           name: capitalizeText(taskEdit.name),
-          create: taskEdit.create,
-          modify: taskEdit.modify,
+          created: taskEdit.created,
+          modified: taskEdit.modified,
           priority: taskEdit.priority,
           status: taskEdit.status,
           description: taskEdit.description,
@@ -113,16 +113,16 @@ const TaskEditForm = ({
               type="text"
               className="d-none"
               onChange={handleChange}
-              value={taskEdit.create}
-              name="create"
+              value={taskEdit.created}
+              name="created"
             />
 
             <Form.Control
               type="text"
               className="d-none"
               onChange={handleChange}
-              value={taskEdit.modify}
-              name="modify"
+              value={taskEdit.modified}
+              name="modified"
             />
 
             <Form.Control

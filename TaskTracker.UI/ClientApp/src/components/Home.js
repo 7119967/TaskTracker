@@ -21,10 +21,10 @@ export class Home extends Component {
       row: "",
       id: "",
       name: "",
-      create: formatDate(Date.now()),
-      modify: formatDate(Date.now()),
+      created: formatDate(Date.now()),
+      modified: formatDate(Date.now()),
       startDate: formatDate(Date.now()),
-      completionDate: "",
+      finishDate: "",
       priority: "Default",
       status: "Default",
       loading: true,
@@ -36,7 +36,7 @@ export class Home extends Component {
   }
 
   async getAllProjects() {
-    const response = await fetch("https://localhost:7172/api/Project");
+    const response = await fetch("http://localhost:5172/api/Project");
     const data = await response.json();
     this.setState({ projects: data, loading: false });
   }
@@ -66,10 +66,10 @@ export class Home extends Component {
       project: {
         id: setProject.id,
         name: setProject.name,
-        create: formatDate(setProject.create),
-        modify: formatDate(Date.now()),
+        created: formatDate(setProject.created),
+        modified: formatDate(Date.now()),
         startDate: formatDate(setProject.startDate),
-        completionDate: formatDate(setProject.completionDate),
+        finishDate: formatDate(setProject.finishDate),
         priority: setProject.priority,
         status: setProject.status,
         tasks: setProject.tasks,
@@ -191,8 +191,7 @@ export class Home extends Component {
                 <h5 className="card-header">Info</h5>
                 <div className="card-body">
                   <p className="card-text">
-                    The program is a Web API for entering project data and also
-                    keeps tasks entities into the database (task tracker).
+                  The program is a Web API application for entering data of a project, keeps tasks entities into the database, and also allows to track tasks of a project by their statuses (TaskTracker).
                   </p>
                   {countNewProjects === 0 ? (
                     <button

@@ -39,17 +39,17 @@ namespace TaskTracker.UnitTests
                 new  MyTask{
                 Name = "MyTask Name 1",
                 Status = Core.Enums.TaskStatus.ToDo,
-                Create = DateTime.Now,
+                Created = DateTime.Now,
                 },
                 new  MyTask{
                 Name = "MyTask Name 2",
                 Status = Core.Enums.TaskStatus.InProgress,
-                Create = DateTime.Now
+                Created = DateTime.Now
                 },
                 new  MyTask{
                 Name = "MyTask Name 3",
                 Status = Core.Enums.TaskStatus.Done,
-                Create = DateTime.Now
+                Created = DateTime.Now
                 }
             };
 
@@ -71,7 +71,7 @@ namespace TaskTracker.UnitTests
                 {
                     Name = "MyTask Name 1",
                     Status = Core.Enums.TaskStatus.ToDo,
-                    Create = DateTime.Now,
+                    Created = DateTime.Now,
                 };
 
                 _unitOfWork.Setup(

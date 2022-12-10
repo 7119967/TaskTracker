@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaskTracker.Core.Entities;
+﻿using TaskTracker.Core.Entities;
 using Task = System.Threading.Tasks.Task;
 
 namespace TaskTracker.Core.Interfaces

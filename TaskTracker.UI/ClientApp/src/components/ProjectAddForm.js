@@ -32,7 +32,7 @@ const ProjectAddForm = ({getAllProjects, updateStateShowAddForm, ...props}) => {
 
   const postProject = async () => {
     const request = mapData()
-    await fetch("https://localhost:7172/api/Project", {
+    await fetch("http://localhost:5172/api/Project", {
       headers: {
         "Content-Type": "application/json",
       },
@@ -100,16 +100,16 @@ const ProjectAddForm = ({getAllProjects, updateStateShowAddForm, ...props}) => {
                 type="text"
                 className="d-none"
                 onChange={handleChange}
-                value={projectAdd.create}
-                name="create"
+                value={projectAdd.created}
+                name="created"
               />
 
               <Form.Control
                 type="text"
                 className="d-none"
                 onChange={handleChange}
-                value={projectAdd.modify}
-                name="modify"
+                value={projectAdd.modified}
+                name="modified"
               />
 
             <Row className="mb-3">
@@ -198,14 +198,14 @@ const ProjectAddForm = ({getAllProjects, updateStateShowAddForm, ...props}) => {
                 <Form.Control.Feedback type="invalid">Choose one item of the list.</Form.Control.Feedback>
               </Form.Group>
 
-              <Form.Group as={Col} controlId="form-completionDate">
+              <Form.Group as={Col} controlId="form-finishDate">
                 <Form.Label>Completion</Form.Label>
                 <Form.Control
                   required
                   type="date"
                   onChange={handleChange}
-                  value={projectAdd.completionDate}
-                  name="completionDate"
+                  value={projectAdd.finishDate}
+                  name="finishDate"
                 />
                 <Form.Control.Feedback type="invalid">Specify a date.</Form.Control.Feedback>
               </Form.Group>

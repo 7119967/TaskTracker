@@ -5,7 +5,6 @@ namespace TaskTracker.Core.Entities
 {
     public class Security : BaseEntity
     {
-        public string Name { get; set; }
         public string Username { get; set; }
 
         [JsonIgnore]

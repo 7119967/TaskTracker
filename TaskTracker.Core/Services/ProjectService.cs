@@ -39,7 +39,7 @@ namespace TaskTracker.Core.Services
 
         public IEnumerable<Project> ProjectAndTasks(Guid id)
         {
-            var includes = new string[] { "Task"};
+            var includes = new string[] { "Task" };
             var res = _unitOfWork.ProjectRepository.Find(x => x.Id == id, includes);
             return res;
         }

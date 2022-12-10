@@ -45,8 +45,8 @@ export const formatDate = (date) => {
   ];
 
   export const initTask = {
-    create: formatDate(Date.now()),
-    modify: formatDate(Date.now()),
+    created: formatDate(Date.now()),
+    modified: formatDate(Date.now()),
     name: "",
     priority: "",
     status: "",
@@ -57,10 +57,10 @@ export const formatDate = (date) => {
 
   export const initProject = {
     name: "",
-    create: formatDate(Date.now()),
-    modify: formatDate(Date.now()),
+    created: formatDate(Date.now()),
+    modified: formatDate(Date.now()),
     startDate: formatDate(Date.now()),
-    completionDate: "",
+    finishDate: "",
     priority: "",
     status: "",
     tasks: []

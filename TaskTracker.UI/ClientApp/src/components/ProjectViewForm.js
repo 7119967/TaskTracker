@@ -82,14 +82,14 @@ const ProjectViewForm = ({ row, project, getAllProjects, updateStateShowViewForm
             <Form.Control
                 type="text"
                 className="d-none"
-                value={projectView.create}
-                name="create"
+                value={projectView.created}
+                name="created"
               />
 
               <Form.Control
                 type="text"
                 className="d-none"
-                value={projectView.modify}
+                value={projectView.modified}
                 name="modify"
               />
 
@@ -174,13 +174,13 @@ const ProjectViewForm = ({ row, project, getAllProjects, updateStateShowViewForm
                 <Form.Control.Feedback type="invalid">Choose one item of the list.</Form.Control.Feedback>
               </Form.Group>
 
-              <Form.Group as={Col} controlId="form-completionDate">
+              <Form.Group as={Col} controlId="form-finishDate">
                 <Form.Label>Completion</Form.Label>
                 <Form.Control
                   disabled
                   type="date"
-                  value={projectView.completionDate}
-                  name="completionDate"
+                  value={projectView.finishDate}
+                  name="finishDate"
                 />
                 <Form.Control.Feedback type="invalid">Specify a date.</Form.Control.Feedback>
               </Form.Group>

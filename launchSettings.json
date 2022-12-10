@@ -10,7 +10,7 @@
         "tasktracker.api": "StartDebugging",
         "nginx.proxy": "StartWithoutDebugging",
         "tasktracker.ui": "StartDebugging",
-        "pg_db": "StartWithoutDebugging",
+        "pgdatabase": "StartWithoutDebugging",
         "pg_admin": "StartWithoutDebugging"
       }
     }

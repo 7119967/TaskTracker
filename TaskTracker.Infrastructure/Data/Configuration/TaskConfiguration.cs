@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using TaskTracker.Core.Entities;
 using MyTask = TaskTracker.Core.Entities.MyTask;
 
 namespace TaskTracker.Infrastructure.Data.Configuration
@@ -13,8 +12,8 @@ namespace TaskTracker.Infrastructure.Data.Configuration
 
             entity.Property(e => e.Name)
                 .HasMaxLength(256)
-                .IsUnicode(false);            
-            
+                .IsUnicode(false);
+
             entity.Property(e => e.Description)
                 .HasMaxLength(256)
                 .IsUnicode(false);
@@ -38,8 +37,8 @@ namespace TaskTracker.Infrastructure.Data.Configuration
             //    .HasForeignKey(d => d.OwerId)
             //    .HasConstraintName("FK_Departament_Owner");
 
-            entity.Property(e => e.Create).HasColumnType("datetime");
-            entity.Property(e => e.Modify).HasColumnType("datetime");
+            entity.Property(e => e.Created).HasColumnType("datetime");
+            entity.Property(e => e.Modified).HasColumnType("datetime");
         }
     }
 }

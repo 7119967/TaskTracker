@@ -53,7 +53,7 @@ const ProjectEditForm = ({
   };
 
   const putProject = async (editProject) => {
-    const url = "https://localhost:7172/api/Project/?id=";
+    const url = "http://localhost:5172/api/Project/?id=";
     await fetch(url.concat(editProject.id), {
       headers: {
         "Content-Type": "application/json",
@@ -79,12 +79,12 @@ const ProjectEditForm = ({
     const editProject = {
       id: projectEdit.id,
       name: capitalizeText(projectEdit.name),
-      create: projectEdit.create,
-      modify: projectEdit.modify,
+      created: projectEdit.created,
+      modified: projectEdit.modified,
       priority: projectEdit.priority,
       status: projectEdit.status,
       startDate: formatDate(projectEdit.startDate),
-      completionDate: formatDate(projectEdit.completionDate),
+      finishDate: formatDate(projectEdit.finishDate),
     };
 
     validationForm(e);
@@ -112,16 +112,16 @@ const ProjectEditForm = ({
               type="text"
               className="d-none"
               onChange={handleChange}
-              value={projectEdit.create}
-              name="create"
+              value={projectEdit.created}
+              name="created"
             />
 
             <Form.Control
               type="text"
               className="d-none"
               onChange={handleChange}
-              value={projectEdit.modify}
-              name="modify"
+              value={projectEdit.modified}
+              name="modified"
             />
 
             <Form.Group className="mb-3 d-none" controlId="form-id">
@@ -199,14 +199,14 @@ const ProjectEditForm = ({
               </Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="form-completionDate">
+            <Form.Group className="mb-3" controlId="form-finishDate">
               <Form.Label>CompletionDate</Form.Label>
               <Form.Control
                 required
                 type="date"
                 onChange={handleChange}
-                value={projectEdit.completionDate}
-                name="completionDate"
+                value={projectEdit.finishDate}
+                name="finishDate"
               />
               <Form.Control.Feedback type="invalid">
                 Specify a date.

@@ -9,7 +9,7 @@ namespace TaskTracker.Core.QueryFilters
         public string Name { get; set; }
         public string Description { get; set; }
         public Priority Priority { get; set; }
-        public DateTime? Create { get; set; }
-        public DateTime? Modify { get; set; }
+        public DateTime? Created { get; set; }
+        public DateTime? Modified { get; set; }
     }
 }

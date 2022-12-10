@@ -8,8 +8,8 @@ const AddDeleteTableRows = ({ tasksData, setTasksData }) => {
         e.preventDefault();
 
         const initTask = {
-            create: formatDate(Date.now()),
-            modify: formatDate(Date.now()),
+            created: formatDate(Date.now()),
+            modified: formatDate(Date.now()),
             name: "",
             priority: "Default",
             status: "Default",

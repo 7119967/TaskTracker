@@ -1,13 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using TaskTracker.Core.Entities;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using MyTask = TaskTracker.Core.Entities.MyTask;
 
 namespace TaskTracker.Infrastructure.Data
 {
     public partial class DatabaseContext : DbContext
-    { 
+    {
         public DbSet<Security> Securities { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<MyTask> Tasks { get; set; }
@@ -18,9 +16,9 @@ namespace TaskTracker.Infrastructure.Data
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder.UseNpgsql(b => b.MigrationsAssembly("TaskTracker.API"));
-                            
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //modelBuilder.ApplyConfiguration(new SecurityConfiguration());
             //modelBuilder.ApplyConfiguration(new ProjectConfiguration());

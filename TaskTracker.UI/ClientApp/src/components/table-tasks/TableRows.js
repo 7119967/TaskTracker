@@ -10,8 +10,8 @@ const TableRows = ({ tasksData, deleteTableRows, handleChange }) => {
     
     tasksData.map((data, index) => {
     const {
-      create,
-      modify,
+      created,
+      modified,
       name,
       priority,
       status,
@@ -24,14 +24,14 @@ const TableRows = ({ tasksData, deleteTableRows, handleChange }) => {
             {index + 1}
             <input
               type="hidden"
-              value={create}
-              name="create"
+              value={created}
+              name="created"
               className="form-control"
             />
             <input
               type="hidden"
-              value={modify}
-              name="modify"
+              value={modified}
+              name="modified"
               className="form-control"
             />
           </th>
