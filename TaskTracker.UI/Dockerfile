@@ -31,3 +31,4 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "TaskTracker.UI.dll"]
+CMD ["npm", "start"]
