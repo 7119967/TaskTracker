@@ -4,7 +4,6 @@ services:
     pgdatabase:
         image: postgres:14.2
         container_name: postgres
-        #restart: always
         hostname: pgdatabase
         volumes:
             - ./postgresql/init-database.sh:/docker-entrypoint-initdb.d/init-database.sh
@@ -16,8 +15,6 @@ services:
             POSTGRES_PASSWORD: aderader
             POSTGRES_DB: TaskTracker
             PGDATA: "/var/lib/postgresql/data"
-        #stdin_open: true
-        #tty: true
         restart: unless-stopped
         healthcheck:
             test: ["CMD-SHELL", "pg_isready -U Rashit -d TaskTracker"]
@@ -28,30 +25,19 @@ services:
 
     pg_admin:
         image: dpage/pgadmin4:latest
-        #image: dpage/pgadmin4:snapshot
         container_name: pgadmin
-        #hostname: pgadmin
         depends_on:
             - pgdatabase
         environment:
             PGADMIN_DEFAULT_EMAIL: "7119967@mail.ru"
             PGADMIN_DEFAULT_PASSWORD: "aderader"
-            #PGADMIN_CONFIG_SERVER_MODE: "False"
             PGADMIN_LISTEN_PORT: 80
         links:
             - "pgdatabase: pgsql-server"
-        #volumes:
-        #    - ./pgadmin:/var/lib/pgadmin        
-        #command: bash chmod 0777 /var/lib/pgadmin -R
         ports:
             - 5050:80            
             - 5051:443
         restart: unless-stopped
-        #deploy:
-        #  resources:
-        #    limits:
-        #      cpus: '0.5'
-        #      memory: 1G
 
     tasktracker.api:
         image: ${DOCKER_REGISTRY-}tasktrackerapi
@@ -85,6 +71,10 @@ services:
           - tasktracker.ui
         volumes:
           - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+
+networks:
+   default:
+        name: tasktracker-network
 
 volumes:
   pgdata: {}

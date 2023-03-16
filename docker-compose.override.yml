@@ -6,7 +6,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
       - NODE_ENV=production
-      - DB_HOST=postgres
+      - DB_HOST=pgdatabase
       - DB_PORT=5432
       - DB_USER=Rashit
       - DB_PASSWORD=aderader
